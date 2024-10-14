@@ -7,7 +7,7 @@ import {
 
 const Footer = () => {
   return (
-    <div className="p-[50px] text-white bg-[#020c1b] position: relative mt-12">
+    <div className="p-[50px] text-white bg-[#020c1b] position: relative">
       <div className=" flex justify-center items-center flex-col w-full gap-5">
         <div className="flex justify-center items-center text-center">
           <p className="p-2 text-white hover:text-pink-700 hover:underline transition duration-300">

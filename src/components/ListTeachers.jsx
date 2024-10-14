@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getTeachersData, teachersData, teachersLoading } from "../redux/slices/teacherSlice"
+import { deleteTeacher, getTeachersData, teachersData, teachersLoading } from "../redux/slices/teacherSlice"
 import { AiOutlineDelete } from "react-icons/ai"
 import { BiSolidEdit } from "react-icons/bi"
 import ConfirmationModal from "./ConfirmationModal"
@@ -8,6 +8,8 @@ import { Link, useParams } from "react-router-dom"
 import Modal from "./Modal"
 import UpdateTeachersForm from "./admin/UpdateTeachersForm"
 import { selectSchoolById } from "../redux/slices/schoolSlice"
+import TeacherForm from "./admin/TeacherForm"
+import { toast, ToastContainer } from "react-toastify"
 
 const Teachers = () => {
 
@@ -20,21 +22,22 @@ const Teachers = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState(null);
 
-
-  const dispatch = useDispatch()
+   const dispatch = useDispatch()
   const data = useSelector(teachersData)
   const loading = useSelector(teachersLoading)
 
   useEffect(()=>{
+    if(schoolById?._id){
    dispatch(getTeachersData(schoolById?._id))
-  }, [])
+    }
+  }, [schoolById?._id])
 
 useEffect(()=>{
   setTeachers(data)
 },[data])
 
-  const openEditModal = (owner) => {
-    setSelectedTeacherUpdate(owner);
+  const openEditModal = (data) => {
+    setSelectedTeacherUpdate(data);
     setIsModalOpen(true);
   };
 
@@ -45,17 +48,38 @@ useEffect(()=>{
   };
 
   const openConfirmation = (ownerId) => {
+    console.log("YEACH ID", teachers.find((teacher) => teacher._id === ownerId).firstname)
     setTeacherToDelete(ownerId); // Set the owner ID to delete
     setIsConfirmationOpen(true); // Open the confirmation modal
   };
 
+  const closeConfirmation = () => {
+    setTeacherToDelete(null); // Reset the owner ID
+    setIsConfirmationOpen(false); // Close the confirmation modal
+  };
+
+  const handleDelete = async() => {
+    try {
+      const response = await dispatch(deleteTeacher(teacherToDelete)).unwrap();
+      console.log("STATUS", response)
+      if (response.status) {
+        toast.success("Deleted SuccessFully");
+        dispatch(getTeachersData(schoolById?._id));
+        closeConfirmation();
+      }
+    } catch (err) {
+      toast.error("Error", err);
+      toast.error(err);
+    }
+  };
 
   return (
     <div className="p-8">
+       <ToastContainer />
     {/* Header with the Register School button */}
     <div className="flex justify-between items-center mb-6">
       <h6 className="text-xl font-bold">All Teachers({teachers.length})</h6>
-        <Link to={`/teacher/addTeacher?schoolId=${schoolById._id}`}>
+        <Link to={`/teacher/addTeacher?schoolId=${schoolById?._id}`}>
         <button
           type="button"
           className="bg-black text-white px-4 py-2 rounded">
@@ -91,8 +115,8 @@ useEffect(()=>{
                   No Teachers Data available
                 </td>
               </tr>
-            ) : ( teachers?.map((data) => (
-                <tr key={data._id} className="hover:bg-gray-100">
+            ) : (teachers.length &&  teachers?.map((data, i) => (
+                <tr key={i} className="hover:bg-gray-100">
                <td className="py-3 px-4 border-b"> {data.firstname} {data.lastname}</td>
                   <td className="py-3 px-4 border-b">{data.gender}</td>
                   <td className="py-3 px-4 border-b">{data.phone}</td>
@@ -105,7 +129,7 @@ useEffect(()=>{
                       <BiSolidEdit />
                     </button>
                     <button
-                      onClick={() => openConfirmation(data._id)}
+                      onClick={() => openConfirmation(data?._id)}
                       className="text-red-500 hover:underline"
                     >
                       <AiOutlineDelete />
@@ -123,22 +147,23 @@ useEffect(()=>{
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <UpdateTeachersForm
-          selectedSchoolUpdate={selectedTeacherUpdate}
-          setSelectedSchoolUpdate={setSelectedTeacherUpdate}
+          type="Update"
+          selectedTeacherUpdate={selectedTeacherUpdate}
+          setSelectedTeacherUpdate={setSelectedTeacherUpdate}
           closeModal={closeModal}
         />
       </Modal>
 
-      {/* <ConfirmationModal
+      <ConfirmationModal
         isOpen={isConfirmationOpen}
         onClose={closeConfirmation}
-        onConfirm={() => handleDelete({ schoolToDelete })}
+        onConfirm={() => handleDelete({ teacherToDelete })}
         ownerName={
-          schoolToDelete
-            ? schools.find((school) => school._id === schoolToDelete)?.name
+          teacherToDelete
+            ? teachers.find((teacher) => teacher._id === teacherToDelete)?.firstname
             : ""
         }
-      /> */}
+      />
     </div>
   </div>
   )

@@ -130,15 +130,15 @@ const schoolSlice = createSlice({
 
 
 export const allSchoolData =(state)=>{
-    return state.school.schoolData
+    return state.school?.schoolData
 }
 
 export const schoolLoading =(state)=>{
-    return state.school.loading
+    return state.school?.loading
 }
 
 export const selectSchoolById = (state, id) => {
-  return state.school.schoolData.find((school) => school._id === id) || null; // Adjust the key if needed
+  return state?.school?.schoolData?.find((school) => school?._id === id) || null; // Adjust the key if needed
 };
 
 export default schoolSlice.reducer

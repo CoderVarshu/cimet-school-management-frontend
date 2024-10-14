@@ -4,7 +4,7 @@ import SideNavButton from "../SideNavButton";
 
 const SideNavForStd = ({ setSelectedComponent, selectedComponent }) => {
 
-   const data= ["Teachers", "Courses", "Classes", "Assignments"]
+   const data= ["Teachers", "Courses", "Classes", "Assignments", "Profile"]
 
 
   return (

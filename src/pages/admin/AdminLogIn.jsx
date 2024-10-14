@@ -28,7 +28,7 @@ const AdminLogIn = () => {
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
-        console.log("LOG IN DETAILS", values);
+        // console.log("LOG IN DETAILS", values);
         try {
             const response = await dispatch(adminLogIn(values)).unwrap(); // Await the loginUser function
             if (response.status) {

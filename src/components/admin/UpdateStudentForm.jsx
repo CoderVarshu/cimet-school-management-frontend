@@ -1,63 +1,36 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import { registerTeacher } from "../../redux/slices/teacherSlice";
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { editStudent, getStudentsData } from '../../redux/slices/studentsSlice';
+import { toast } from 'react-toastify';
 
-const TeacherForm = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
-  const schoolId = queryParams.get('schoolId');
+const UpdateStudentForm = ({setSelectedStudentUpdate, selectedStudentUpdate, closeModal}) => {
 
-  console.log("SCHOOL ID", schoolId);
-  const [showPassword, setShowPassword] = useState(false);
-  const [getUserDetails, setUserDetails] = useState({
-    schoolId,
-    firstname: "",
-    lastname: "",
-    gender: "male",
-    email: "",
-    phone: "",
-    class: ["12A"],
-    role: "teacher",
-    password: "",
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserDetails({
-      ...getUserDetails,
-      [name]: value,
-    });
-  };
+ const dispatch = useDispatch()
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await dispatch(registerTeacher(getUserDetails)).unwrap();
+      const response = await dispatch(editStudent(selectedStudentUpdate)).unwrap();
+      console.log("RESPONSE", response)
       if (response.status) {
         toast.success(response.message);
-
+        dispatch(getStudentsData(selectedStudentUpdate?.schoolId))
         setTimeout(() => {
-          navigate(-1);
-        }, 1000);
+          closeModal()
+        }, 100);
       }
     } catch (error) {
       toast.error(error.error || "Something went wrong. Please try again.");
-      console.error("Error222:", error);
+      console.error("Error:", error);
     }
   };
 
+
   return (
-    <div className="flex justify-center m-5 items-center min-h-screen ">
-      <ToastContainer />
-      <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Add Teacher Details</h2>
+<div className="flex justify-center m-5 items-center min-h-screen ">
+      <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg ">
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Student's Details</h2>
         <form onSubmit={handleSubmit}>
           {/* Name Fields */}
           <div className="flex mb-4 space-x-4">
@@ -68,8 +41,13 @@ const TeacherForm = () => {
               <input
                 type="text"
                 name="firstname"
-                value={getUserDetails.firstname}
-                onChange={handleInputChange}
+                value={selectedStudentUpdate ? selectedStudentUpdate.firstname : ""}
+                onChange={(e) =>
+                  setSelectedStudentUpdate({
+                    ...selectedStudentUpdate,
+                    firstname: e.target.value,
+                  })
+                }
                 className="w-full p-2 border border-gray-300 rounded"
                 required
               />
@@ -81,8 +59,13 @@ const TeacherForm = () => {
               <input
                 type="text"
                 name="lastname"
-                value={getUserDetails.lastname}
-                onChange={handleInputChange}
+                value={selectedStudentUpdate ? selectedStudentUpdate.lastname : ""}
+                onChange={(e) =>
+                  setSelectedStudentUpdate({
+                    ...selectedStudentUpdate,
+                    lastname: e.target.value,
+                  })
+                }
                 className="w-full p-2 border border-gray-300 rounded"
                 required
               />
@@ -94,8 +77,13 @@ const TeacherForm = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
             <select
               name="gender"
-              value={getUserDetails.gender}
-              onChange={handleInputChange}
+              value={selectedStudentUpdate ? selectedStudentUpdate.gendername : ""}
+              onChange={(e) =>
+                setSelectedStudentUpdate({
+                  ...selectedStudentUpdate,
+                  gender: e.target.value,
+                })
+              }
               className="w-full p-2 border border-gray-300 rounded"
             >
               <option value="male">Male</option>
@@ -109,8 +97,13 @@ const TeacherForm = () => {
             <input
               type="email"
               name="email"
-              value={getUserDetails.email}
-              onChange={handleInputChange}
+              value={selectedStudentUpdate ? selectedStudentUpdate.email : ""}
+              onChange={(e) =>
+                setSelectedStudentUpdate({
+                  ...selectedStudentUpdate,
+                  email: e.target.value,
+                })
+              }
               className="w-full p-2 border border-gray-300 rounded"
               required
             />
@@ -122,8 +115,13 @@ const TeacherForm = () => {
             <input
               type="tel"
               name="phone"
-              value={getUserDetails.phone}
-              onChange={handleInputChange}
+              value={selectedStudentUpdate ? selectedStudentUpdate.phone : ""}
+              onChange={(e) =>
+                setSelectedStudentUpdate({
+                  ...selectedStudentUpdate,
+                  phone: e.target.value,
+                })
+              }
               className="w-full p-2 border border-gray-300 rounded"
               required
             />
@@ -135,7 +133,7 @@ const TeacherForm = () => {
             <input
               type="text"
               name="class"
-              value={getUserDetails.class}
+              value={selectedStudentUpdate ? selectedStudentUpdate.class : ""}
               onChange={() => { }}
               className="w-full p-2 border border-gray-300 rounded"
               required
@@ -143,7 +141,7 @@ const TeacherForm = () => {
           </div>
 
           {/* Password Field */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <div className="relative">
               <input
@@ -161,7 +159,7 @@ const TeacherForm = () => {
                 {showPassword ? "👁️" : "👁️‍🗨️"}
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="mt-6">
@@ -169,14 +167,13 @@ const TeacherForm = () => {
               type="submit"
               className="bg-black text-white px-4 py-2 rounded hover:bg-black-600 w-full"
             >
-              Add Teacher
+              Edit Student
             </button>
           </div>
         </form>
       </div>
-
     </div>
-  );
-};
+  )
+}
 
-export default TeacherForm;
+export default UpdateStudentForm

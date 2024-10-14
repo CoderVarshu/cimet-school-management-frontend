@@ -9,6 +9,7 @@ import UserLogIn from "../pages/user/UserLogIn";
 import SchoolDetails from "../pages/SchoolDetails";
 import TeacherForm from "../components/admin/TeacherForm";
 import StudentForm from "../components/admin/StudentForm";
+import { ListSchool } from "../components/admin/ListSchool";
 
 const router = createBrowserRouter([
     {
@@ -17,8 +18,13 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element:<Home />,
+                element:<PrivateRoute><ListSchool /></PrivateRoute>,
                
+            },
+            {
+                path:'/list-school',
+                element:<PrivateRoute><ListSchool /></PrivateRoute>,
+
             },
             {
                 path:'/register',

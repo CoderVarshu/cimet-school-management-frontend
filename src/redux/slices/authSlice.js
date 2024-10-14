@@ -10,7 +10,7 @@ export const loginUser= createAsyncThunk(
          const response = await axios.post(`${base_url}/user/user-login`,values)
          const token = response.data.token;
         // Save token in cookies (you can set expiration based on the token's expiry)
-        Cookies.set('authToken', token, { expires: 1 });
+        Cookies.set('userAuthToken', token, { expires: 1 });
          return response.data
         }catch(err){
             return rejectWithValue({
@@ -28,7 +28,7 @@ export const adminLogIn = createAsyncThunk(
         const response = await axios.post(`${base_url}/auth/login`,values);
         const token = response.data.token;
         // Save token in cookies (you can set expiration based on the token's expiry)
-        Cookies.set('authToken', token, { expires: 1 });
+        Cookies.set('adminAuthToken', token, { expires: 1 });
         return response.data;
       } catch (err) {
         // Return only the serializable parts of the error
@@ -53,9 +53,10 @@ const authSlice = createSlice({
     },
     reducers: {
         logoutUser: (state) => {
-            Cookies.remove('authToken');
+            Cookies.remove('adminAuthToken');
             state.isAuth = false;
             state.authData = [];
+            state.isAdminAuth = false;
           },
     },
     extraReducers:(builder)=>{
@@ -105,6 +106,14 @@ export const isAuth = (state)=>{
 
 export const userData =(state)=>{
     return state.auth.userData
+}
+
+export const logOut =(state)=>{
+  return state.auth.logOut
+}
+
+export const isAdminAuth=(state)=>{
+  return state.auth.isAdminAuth
 }
 
 export default authSlice.reducer

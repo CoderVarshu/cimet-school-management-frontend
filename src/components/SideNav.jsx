@@ -6,7 +6,6 @@ const SideNav = ({ setSelectedComponent, selectedComponent }) => {
 
    const data= ["Teachers", "Students", "Courses", "Classes", "Assignments"]
 
-//    const data =[]
 
   return (
     <nav className="flex flex-col  p-4 bg-slate-900 h-full">

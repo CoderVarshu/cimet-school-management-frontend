@@ -11,7 +11,7 @@ import SideNavForStd from "../components/user/SideNavForStd";
 const SchoolDetails = () => {
   const { id } = useParams();
 
-  const [selectedComponent, setSelectedComponent] = useState("");
+  const [selectedComponent, setSelectedComponent] = useState("Teachers");
   const dispatch = useDispatch();
   const schoolById = useSelector((state) => selectSchoolById(state, id));
   const usersData = useSelector(userData);
@@ -30,7 +30,6 @@ const SchoolDetails = () => {
       <div className="w-1/6 bg-gray-800 text-white">
     {usersData[0]?.user?.role === "teacher" ? (
       <SideNavForTeacher
-       
         selectedComponent={selectedComponent}
         setSelectedComponent={setSelectedComponent}
       />

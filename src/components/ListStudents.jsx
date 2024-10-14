@@ -1,12 +1,14 @@
 import { BiSolidEdit } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { getStudentsData, studenstLoading, studentsData } from '../redux/slices/studentsSlice';
+import { deleteStudent, getStudentsData, studenstLoading, studentsData } from '../redux/slices/studentsSlice';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { selectSchoolById } from '../redux/slices/schoolSlice';
 import Modal from './Modal';
-import UpdateTeachersForm from './admin/UpdateTeachersForm';
+import { toast, ToastContainer } from 'react-toastify';
+import UpdateStudentForm from './admin/UpdateStudentForm';
+import ConfirmationModal from './ConfirmationModal';
 
 const ListStudents = () => {
 
@@ -47,9 +49,30 @@ const openConfirmation = (ownerId) => {
   setIsConfirmationOpen(true); // Open the confirmation modal
 };
   
+const closeConfirmation = () => {
+  setStudentToDelete(null); // Reset the owner ID
+  setIsConfirmationOpen(false); // Close the confirmation modal
+};
+
+
+const handleDelete = async() => {
+  try {
+    const response = await dispatch(deleteStudent(studentToDelete)).unwrap();
+    if (response.status) {
+      toast.success("Deleted SuccessFully");
+      dispatch(getStudentsData(schoolById?._id));
+      closeConfirmation();
+
+    }
+  } catch (err) {
+    toast.error("Error", err);
+    toast.error(err);
+  }
+};
 
   return (
     <div className="p-8">
+       <ToastContainer />
     {/* Header with the Register School button */}
     <div className="flex justify-between items-center mb-6">
       <h6 className="text-xl font-bold">All Students({students.length})</h6>
@@ -89,8 +112,8 @@ const openConfirmation = (ownerId) => {
                   No Students Data available
                 </td>
               </tr>
-            ) : ( students?.map((data) => (
-                <tr key={data._id} className="hover:bg-gray-100">
+            ) : ( students?.map((data, i) => (
+                <tr key={i} className="hover:bg-gray-100">
                <td className="py-3 px-4 border-b"> {data.firstname} {data.lastname}</td>
                   <td className="py-3 px-4 border-b">{data.gender}</td>
                   <td className="py-3 px-4 border-b">{data.phone}</td>
@@ -120,21 +143,23 @@ const openConfirmation = (ownerId) => {
       {/* modal for edit  */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <UpdateTeachersForm
+        <UpdateStudentForm
+        selectedStudentUpdate={selectedStudentUpdate}
+        setSelectedStudentUpdate={setSelectedStudentUpdate}
           closeModal={closeModal}
         />
       </Modal>
 
-      {/* <ConfirmationModal
+      <ConfirmationModal
         isOpen={isConfirmationOpen}
         onClose={closeConfirmation}
-        onConfirm={() => handleDelete({ schoolToDelete })}
+        onConfirm={() => handleDelete({ studentToDelete })}
         ownerName={
-          schoolToDelete
-            ? schools.find((school) => school._id === schoolToDelete)?.name
+          studentToDelete
+            ? students.find((std) => std._id === studentToDelete)?.firstname
             : ""
         }
-      /> */}
+      />
     </div>
   </div>
   );
