@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import InnerComponent from "../components/InnerComponent";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSchool, selectSchoolById } from "../redux/slices/schoolSlice";

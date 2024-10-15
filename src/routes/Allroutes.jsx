@@ -75,14 +75,14 @@ const router = createBrowserRouter([
                 ]
             },
             {
-                path: 'courses/list-courses',
+                path: 'subjects/list-subjects',
                 children:[
                     {
                         index:true,
                         element: <ListSubject />
                     },
                     {
-                        path:'add-course',
+                        path:'add-subject',
                         element: <SubjectForm />
                     }
                 ]

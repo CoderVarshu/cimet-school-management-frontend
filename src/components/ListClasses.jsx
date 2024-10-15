@@ -25,6 +25,8 @@ const ListClasses = () => {
   const loading = useSelector(classesLoading)
   const classesData = useSelector(getClassesData)
 
+  console.log("CLASS", classesData)
+
   useEffect(() => {
     if (schoolById) {
       dispatch(fetchClasses(schoolById._id))
