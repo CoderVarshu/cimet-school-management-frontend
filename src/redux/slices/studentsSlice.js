@@ -6,7 +6,7 @@ export const registerStudent = createAsyncThunk(
   "student/add-user",
   async (info, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${base_url}/user/add-user`, info);
+      const response = await axios.post(`${base_url}/student/add-student`, info);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -19,7 +19,7 @@ export const getStudentsData = createAsyncThunk(
     async (schoolId) => {
       try {
         const response = await axios.get(
-          `${base_url}/user/get-users?schoolId=${schoolId}&role=student`
+          `${base_url}/student/get-students?schoolId=${schoolId}`
         );
         console.log("API RESPONSE", response);
         return response.data.users;

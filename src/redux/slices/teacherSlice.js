@@ -7,7 +7,7 @@ export const getTeachersData = createAsyncThunk(
   async (schoolId) => {
     try {
       const response = await axios.get(
-        `${base_url}/user/get-users?schoolId=${schoolId}&role=teacher`
+        `${base_url}/teacher/get-teacher?schoolId=${schoolId}`
       );
       return response.data.users;
     } catch (err) {
@@ -20,7 +20,7 @@ export const registerTeacher = createAsyncThunk(
   "teacher/add-user",
   async (info, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${base_url}/user/add-user`, info);
+      const response = await axios.post(`${base_url}/teacher/add-teacher`, info);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -34,7 +34,7 @@ export const editTeacher = createAsyncThunk(
   async (teacherDetails, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${base_url}/user/update-user/${teacherDetails._id}`,  // Assuming you're passing the school ID in `schoolDetails`
+        `${base_url}/teacher/update-teacher/${teacherDetails._id}`,  // Assuming you're passing the school ID in `schoolDetails`
         teacherDetails
       );
       return response.data;  // Returning the updated school data
@@ -48,13 +48,15 @@ export const deleteTeacher = createAsyncThunk(
   "teacher/deleteTeacher",
   async (teacherId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${base_url}/user/delete-user/${teacherId}`); // Assuming you're passing the school ID as a parameter
+      const response = await axios.delete(`${base_url}/teacher/delete-teacher/${teacherId}`); // Assuming you're passing the school ID as a parameter
       return response.data; // Return the response data if needed (e.g., success message)
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message); // Handle errors gracefully
     }
   }
 );
+
+
 
 const teacherSlice = createSlice({
   name: "teacher",
