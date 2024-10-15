@@ -59,7 +59,6 @@ export const ListSchool = () => {
   const handleDelete = async() => {
     try {
       const response = await dispatch(deleteSchool(schoolToDelete)).unwrap();
-      console.log("STATUS", response)
       if (response.status) {
         toast.success("Deleted SuccessFully");
         dispatch(getSchool());
@@ -68,7 +67,6 @@ export const ListSchool = () => {
       }
     } catch (err) {
       toast.error("Error", err);
-      toast.error(err);
     }
   };
 
@@ -87,13 +85,11 @@ export const ListSchool = () => {
         </Link>
       </div>
 
-      {/* School List Table */}
 
       <div className="overflow-x-auto">
-        {loading ? ( // Conditional rendering based on loading state
+        {loading ? (
           <div className="flex justify-center items-center py-10">
             <span className="loader"></span>{" "}
-            {/* Add your loading spinner or text here */}
             <p className="ml-2">Loading schools...</p>
           </div>
         ) : (
@@ -117,7 +113,7 @@ export const ListSchool = () => {
               ) : (
                 schools?.map((school) => (
                   <tr key={school._id} className="hover:bg-gray-100">
-                 <td className="py-3 px-4 border-b"> <Link to={`/school/${school._id}`}>  {school.name}</Link></td>
+                 <td className="py-3 px-4 border-b"> <Link to={`/school/${school._id}`}>{school.name}</Link></td>
                     <td className="py-3 px-4 border-b">{school.phone}</td>
                     <td className="py-3 px-4 border-b">{school.email}</td>
                     <td className="py-3 px-4 border-b">{school.moto}</td>
@@ -142,7 +138,6 @@ export const ListSchool = () => {
           </table>
         )}
 
-        {/* modal for edit  */}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <UpdateSchoolForm

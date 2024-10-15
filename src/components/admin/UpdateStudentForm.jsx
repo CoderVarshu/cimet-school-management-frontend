@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux'
 import { editStudent, getStudentsData } from '../../redux/slices/studentsSlice';
 import { toast } from 'react-toastify';
 
-const UpdateStudentForm = ({setSelectedStudentUpdate, selectedStudentUpdate, closeModal}) => {
+const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, closeModal }) => {
 
 
- const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await dispatch(editStudent(selectedStudentUpdate)).unwrap();
@@ -28,7 +28,7 @@ const UpdateStudentForm = ({setSelectedStudentUpdate, selectedStudentUpdate, clo
 
 
   return (
-<div className="flex justify-center m-5 items-center min-h-screen ">
+    <div className="flex justify-center m-5 items-center min-h-screen ">
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg ">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit Student's Details</h2>
         <form onSubmit={handleSubmit}>

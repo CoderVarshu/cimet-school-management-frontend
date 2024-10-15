@@ -50,7 +50,7 @@ const StudentForm = () => {
   };
 
   return (
-    <div className="flex justify-center m-5 items-center min-h-screen ">
+    <div className="flex justify-center m-5 items-center h-fit">
       <ToastContainer />
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">

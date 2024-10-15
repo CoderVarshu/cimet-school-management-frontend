@@ -8,10 +8,9 @@ import { Link, useParams } from "react-router-dom"
 import Modal from "./Modal"
 import UpdateTeachersForm from "./admin/UpdateTeachersForm"
 import { selectSchoolById } from "../redux/slices/schoolSlice"
-import TeacherForm from "./admin/TeacherForm"
 import { toast, ToastContainer } from "react-toastify"
 
-const Teachers = () => {
+const ListTeachers = () => {
 
   const {id} = useParams()
   const schoolById = useSelector((state) => selectSchoolById(state, id));
@@ -41,27 +40,24 @@ useEffect(()=>{
     setIsModalOpen(true);
   };
 
-  // Close the modal
   const closeModal = () => {
     setSelectedTeacherUpdate(null)
     setIsModalOpen(false);
   };
 
   const openConfirmation = (ownerId) => {
-    console.log("YEACH ID", teachers.find((teacher) => teacher._id === ownerId).firstname)
-    setTeacherToDelete(ownerId); // Set the owner ID to delete
-    setIsConfirmationOpen(true); // Open the confirmation modal
+    setTeacherToDelete(ownerId); 
+    setIsConfirmationOpen(true); 
   };
 
   const closeConfirmation = () => {
-    setTeacherToDelete(null); // Reset the owner ID
-    setIsConfirmationOpen(false); // Close the confirmation modal
+    setTeacherToDelete(null);
+    setIsConfirmationOpen(false);
   };
 
   const handleDelete = async() => {
     try {
       const response = await dispatch(deleteTeacher(teacherToDelete)).unwrap();
-      console.log("STATUS", response)
       if (response.status) {
         toast.success("Deleted SuccessFully");
         dispatch(getTeachersData(schoolById?._id));
@@ -69,17 +65,15 @@ useEffect(()=>{
       }
     } catch (err) {
       toast.error("Error", err);
-      toast.error(err);
     }
   };
 
   return (
     <div className="p-8">
        <ToastContainer />
-    {/* Header with the Register School button */}
     <div className="flex justify-between items-center mb-6">
-      <h6 className="text-xl font-bold">All Teachers({teachers.length})</h6>
-        <Link to={`/teacher/addTeacher?schoolId=${schoolById?._id}`}>
+      <h6 className="text-xl font-bold">All Teachers({teachers.length || 0})</h6>
+        <Link to={`add-teacher`}>
         <button
           type="button"
           className="bg-black text-white px-4 py-2 rounded">
@@ -87,14 +81,10 @@ useEffect(()=>{
         </button>
       </Link>
     </div>
-
-    {/* Teachers List Table */}
-
     <div className="overflow-x-auto">
-      {loading ? ( // Conditional rendering based on loading state
+      {loading ? ( 
         <div className="flex justify-center items-center py-10">
           <span className="loader"></span>{" "}
-          {/* Add your loading spinner or text here */}
           <p className="ml-2">Loading Teachers Data ...</p>
         </div>
       ) : (
@@ -143,7 +133,6 @@ useEffect(()=>{
       
       )}
 
-      {/* modal for edit  */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <UpdateTeachersForm
@@ -169,4 +158,4 @@ useEffect(()=>{
   )
 }
 
-export default Teachers
+export default ListTeachers

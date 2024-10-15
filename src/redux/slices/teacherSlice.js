@@ -7,9 +7,9 @@ export const getTeachersData = createAsyncThunk(
   async (schoolId) => {
     try {
       const response = await axios.get(
-        `${base_url}/teacher/get-teacher?schoolId=${schoolId}`
+        `${base_url}/teacher/get-teacher/${schoolId}`
       );
-      return response.data.users;
+      return response.data;
     } catch (err) {
       return err;
     }
@@ -20,7 +20,8 @@ export const registerTeacher = createAsyncThunk(
   "teacher/add-user",
   async (info, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${base_url}/teacher/add-teacher`, info);
+      const response = await axios.post(`${base_url}/teacher/add-teacher/${info.schoolId}`, info);
+      console.log("APIN RES", response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

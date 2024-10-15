@@ -5,58 +5,116 @@ import SchoolForm from "../components/admin/SchoolForm";
 import PrivateRoute from "../pages/admin/PrivateRoute";
 import AdminLogIn from "../pages/admin/AdminLogIn";
 import UserLogIn from "../pages/user/UserLogIn";
-// import PrivateRouteUser from "../pages/user/PrivateRouteUser";
-import SchoolDetails from "../pages/SchoolDetails";
 import TeacherForm from "../components/admin/TeacherForm";
 import StudentForm from "../components/admin/StudentForm";
-import { ListSchool } from "../components/admin/ListSchool";
+import ClassesForm from "../components/admin/ClassesForm";
+import ListTeachers from "../components/ListTeachers";
+import ListClasses from "../components/ListClasses";
+import ListStudents from "../components/ListStudents";
+import ListSubject from "../components/ListSubject";
+import SubjectForm from "../components/admin/SubjectForm";
+import ListAssignments from "../components/ListAssignments";
+import AssignmentsForm from "../components/admin/AssignmentsForm";
 
 const router = createBrowserRouter([
     {
-        path:'/',
-        element:<Wrapper/>,
+        path: '/admin-dashboard',
+        element: <Wrapper />,
+    },
+    {
+        path: '/register',
+        element: <PrivateRoute><SchoolForm /></PrivateRoute>,
+    },
+    {
+        path: '/school/:id',
+        element: <Home />,
         children: [
             {
-                index: true,
-                element:<PrivateRoute><ListSchool /></PrivateRoute>,
-               
+                index: 'true',
+                element: <ListTeachers />
             },
             {
-                path:'/list-school',
-                element:<PrivateRoute><ListSchool /></PrivateRoute>,
+                path: 'teacher/list-teachers',
+                children: [
+                    {
+                        index: true,
+                        element: <ListTeachers />,
+                    },
+                    {
+                        path: 'add-teacher',
+                        element: <TeacherForm />
+                    },
+                ]
+            },
 
+            {
+                path: 'student/list-students',
+                children: [
+
+                    {
+                        index: true,
+                        element: <ListStudents />
+                    },
+                    {
+                        path: 'add-student',
+                        element: <StudentForm />
+                    }
+                ]
             },
             {
-                path:'/register',
-                element:<PrivateRoute><SchoolForm /></PrivateRoute>,
+                path: 'classes/list-classes',
+                children:[
+                    {
+                        index:true,
+                        element: <ListClasses />
+                    },
+                    {
+                        path:'add-class',
+                        element: <ClassesForm />
+                    }
+                ]
             },
             {
-                path:'/school/:id',
-                element:<SchoolDetails/>
+                path: 'courses/list-courses',
+                children:[
+                    {
+                        index:true,
+                        element: <ListSubject />
+                    },
+                    {
+                        path:'add-course',
+                        element: <SubjectForm />
+                    }
+                ]
             },
             {
-                path:'teacher/addTeacher',
-                element:<TeacherForm />
+                path: 'assignments/list-assignments',
+                children:[
+                    {
+                        index: true,
+                        element: <ListAssignments />
+                    },
+                    {
+                        path:'add-assignment',
+                        element: <AssignmentsForm />
+                    }
+                ]
             },
-            {
-                path:'/student/addStudent',
-                element:<StudentForm />
-            }
-           
         ]
     },
     {
-        path:'/adminlogin',
-        element:<AdminLogIn/>
+        path: '/adminlogin',
+        element: <AdminLogIn />
     },
     {
-        path:'/login',
-        element:<UserLogIn/>
-    }
+        path: '/login',
+        element: <UserLogIn />
+    },
+
 ])
 
-export const AllRoutes =()=>{
-    return(
+export const AllRoutes = () => {
+    return (
         <RouterProvider router={router}></RouterProvider>
     )
 }

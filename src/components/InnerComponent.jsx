@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Classes from "./Classes";
+import ListClasses from "./ListClasses";
 import ListStudents from "./ListStudents";
 import Teachers from "./ListTeachers";
 
@@ -11,14 +11,12 @@ const InnerComponent = ({selectedComponent}) => {
         case "Teachers":
           return <Teachers />;
         case "Classes":
-          return <Classes/>;
+          return <ListClasses/>;
           case "Courses":
               return "Courses";
         default:
           return "Assignments"
       }
-
- 
 }
 
 export default InnerComponent

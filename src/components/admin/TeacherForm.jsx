@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { registerTeacher } from "../../redux/slices/teacherSlice";
+import SelectClass from "../common/SelectClass";
 
 const TeacherForm = () => {
   const dispatch = useDispatch();
@@ -10,7 +11,6 @@ const TeacherForm = () => {
   const queryParams = new URLSearchParams(location.search);
   const schoolId = queryParams.get('schoolId');
 
-  console.log("SCHOOL ID", schoolId);
   const [showPassword, setShowPassword] = useState(false);
   const [getUserDetails, setUserDetails] = useState({
     schoolId,
@@ -40,6 +40,7 @@ const TeacherForm = () => {
     e.preventDefault();
     try {
       const response = await dispatch(registerTeacher(getUserDetails)).unwrap();
+      console.log("RESPONSE", response)
       if (response.status) {
         toast.success(response.message);
 
@@ -128,17 +129,10 @@ const TeacherForm = () => {
               required
             />
           </div>
-
-          {/* Class Field */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
-            <input
-              type="text"
-              name="class"
-              value={getUserDetails.class}
-              onChange={() => { }}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
+            <SelectClass
+              schoolId={schoolId}
+
             />
           </div>
 

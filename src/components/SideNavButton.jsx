@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
 
-const SideNavButton = ({value, setSelectedComponent, isActive}) => {
+import { Link, useLocation } from "react-router-dom"
+
+const SideNavButton = ({ value, path }) => {
+  const location = useLocation()
+
+  const isActive = location.pathname.includes(path);
   return (
-    <button
-    className={`mb-4 p-2 rounded text-white ${
-      isActive ? "bg-gray-900 " : ""
-    }`}
-    onClick={() => setSelectedComponent(value)}
-  >
-    {value}
-  </button>
+    <Link to={path}>
+      <button
+        className={`mb-4 px-8 py-2 rounded-2xl text-white ${isActive ? "bg-primary" : ""
+          }`}
+      >
+        {value}
+      </button>
+    </Link>
   )
 }
 

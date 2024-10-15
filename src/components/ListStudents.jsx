@@ -75,8 +75,8 @@ const handleDelete = async() => {
        <ToastContainer />
     {/* Header with the Register School button */}
     <div className="flex justify-between items-center mb-6">
-      <h6 className="text-xl font-bold">All Students({students.length})</h6>
-        <Link to={`/student/addStudent?schoolId=${schoolById._id}`}>
+      <h6 className="text-xl font-bold">All Students({students?.length})</h6>
+        <Link to={`add-student`}>
         <button
           type="button"
           className="bg-black text-white px-4 py-2 rounded">

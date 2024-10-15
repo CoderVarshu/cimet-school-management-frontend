@@ -28,12 +28,11 @@ const AdminLogIn = () => {
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
-        // console.log("LOG IN DETAILS", values);
         try {
-            const response = await dispatch(adminLogIn(values)).unwrap(); // Await the loginUser function
+            const response = await dispatch(adminLogIn(values)).unwrap();
             if (response.status) {
                 toast.success(response.message);
-                navigate("/");
+                navigate("/admin-dashboard");
                 resetForm()
             } else {
                 toast.error(response.message);
