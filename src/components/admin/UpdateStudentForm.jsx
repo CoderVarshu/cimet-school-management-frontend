@@ -2,17 +2,19 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { editStudent, getStudentsData } from '../../redux/slices/studentsSlice';
 import { toast } from 'react-toastify';
+import SelectClass from '../common/SelectClass';
 
 const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, closeModal }) => {
 
 
   const dispatch = useDispatch()
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("DETAILS", selectedStudentUpdate)
       const response = await dispatch(editStudent(selectedStudentUpdate)).unwrap();
-      console.log("RESPONSE", response)
       if (response.status) {
         toast.success(response.message);
         dispatch(getStudentsData(selectedStudentUpdate?.schoolId))
@@ -26,13 +28,17 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
     }
   };
 
+  const handleClassChange =(selectedClass)=>{
+    setSelectedStudentUpdate({
+      ...selectedStudentUpdate, class:selectedClass
+    })
+  }
 
   return (
     <div className="flex justify-center m-5 items-center min-h-screen ">
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg ">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit Student's Details</h2>
         <form onSubmit={handleSubmit}>
-          {/* Name Fields */}
           <div className="flex mb-4 space-x-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -72,7 +78,6 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
             </div>
           </div>
 
-          {/* Gender Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
             <select
@@ -91,7 +96,6 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
             </select>
           </div>
 
-          {/* Email Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <input
@@ -109,7 +113,6 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
             />
           </div>
 
-          {/* Phone Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
             <input
@@ -127,41 +130,13 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
             />
           </div>
 
-          {/* Class Field */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
-            <input
-              type="text"
-              name="class"
-              value={selectedStudentUpdate ? selectedStudentUpdate.class : ""}
-              onChange={() => { }}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
+            <SelectClass
+              onChange={handleClassChange}
+              selectedClasses={selectedStudentUpdate.class._id}
             />
           </div>
 
-          {/* Password Field */}
-          {/* <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={getUserDetails.password}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-              <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                onClick={toggleShowPassword}
-              >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
-              </span>
-            </div>
-          </div> */}
-
-          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"

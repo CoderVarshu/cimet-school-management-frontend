@@ -9,13 +9,12 @@ export const loginUser= createAsyncThunk(
         try{
          const response = await axios.post(`${base_url}/user/user-login`,values)
          const token = response.data.token;
-        // Save token in cookies (you can set expiration based on the token's expiry)
         Cookies.set('userAuthToken', token, { expires: 1 });
          return response.data
         }catch(err){
             return rejectWithValue({
-                message: err.response?.data?.message || err.message, // Custom error message
-                status: err.response?.status || 500 // Status code
+                message: err.response?.data?.message || err.message,
+                status: err.response?.status || 500
               });
         }
     }
@@ -26,15 +25,14 @@ export const adminLogIn = createAsyncThunk(
     async (values, { rejectWithValue }) => {
       try {
         const response = await axios.post(`${base_url}/auth/login`,values);
+        console.log("VALUES APII", response)
         const token = response.data.token;
-        // Save token in cookies (you can set expiration based on the token's expiry)
         Cookies.set('adminAuthToken', token, { expires: 1 });
         return response.data;
       } catch (err) {
-        // Return only the serializable parts of the error
         return rejectWithValue({
-          message: err.response?.data?.message || err.message, // Custom error message
-          status: err.response?.status || 500 // Status code
+          message: err.response?.data?.message || err.message,
+          status: err.response?.status || 500
         });
       }
     }

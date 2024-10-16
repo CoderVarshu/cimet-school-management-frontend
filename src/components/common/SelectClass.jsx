@@ -2,18 +2,20 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchClasses, getClassesData } from "../../redux/slices/classSlice"
+import { useParams } from "react-router-dom"
 
-const SelectClass = ({  schoolId, multiple, selectedClasses, onChange }) => {
+const SelectClass = ({ multiple, selectedClasses, onChange }) => {
 
     const dispatch = useDispatch()
     const classesData = useSelector(getClassesData)
     const [classes,setClasses ] = useState([])
-
+    const {id} = useParams()
+    console.log()
     useEffect(() => {
-        if(schoolId){
-        dispatch(fetchClasses(schoolId))
+        if(id){
+        dispatch(fetchClasses(id))
         }
-    }, [schoolId])
+    }, [id])
 
     useEffect(()=>{
         if(classesData){
@@ -23,8 +25,8 @@ const SelectClass = ({  schoolId, multiple, selectedClasses, onChange }) => {
 
 
     const handleChange = (event) => {
-      const selectedOptions = Array.from(event.target.selectedOptions, option => option.value)
-      onChange(selectedOptions)  // Pass selected values to parent
+      const selectedOptions = Array.from(event.target.selectedOptions, option => option.value,)
+      onChange(selectedOptions)
   }
 
     return (
@@ -36,10 +38,10 @@ const SelectClass = ({  schoolId, multiple, selectedClasses, onChange }) => {
            value={selectedClasses} 
           className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          {/* <option value="">Select a class</option> */}
-          {classes.map((cls) => (
+          <option value="">Select a class</option>
+          {classes.map((cls, i) => (
             <>
-            <option key={cls._id} value={cls._id}>
+            <option key={i} value={cls._id}>
               {cls.className}  {cls.section}
             </option>
             </>

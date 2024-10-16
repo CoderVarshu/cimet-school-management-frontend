@@ -9,9 +9,8 @@ import {
 } from "../redux/slices/studentsSlice";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { selectSchoolById } from "../redux/slices/schoolSlice";
 import Modal from "./Modal";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import UpdateStudentForm from "./admin/UpdateStudentForm";
 import ConfirmationModal from "./ConfirmationModal";
 
@@ -23,17 +22,17 @@ const ListStudents = () => {
   const [studentToDelete, setStudentToDelete] = useState(null);
 
   const { id } = useParams();
-  const schoolById = useSelector((state) => selectSchoolById(state, id));
+  // const schoolById = useSelector((state) => selectSchoolById(state, id));
   const dispatch = useDispatch();
   const data = useSelector(studentsData);
   const loading = useSelector(studenstLoading);
 
   useEffect(() => {
-    if (schoolById) dispatch(getStudentsData(schoolById?._id));
-  }, [schoolById]);
+    if (id) dispatch(getStudentsData(id));
+  }, [id]);
 
   useEffect(() => {
-    setStudents(data);
+    setStudents(data.data);
   }, [data]);
 
   const openEditModal = (std) => {
@@ -47,13 +46,13 @@ const ListStudents = () => {
   };
 
   const openConfirmation = (ownerId) => {
-    setStudentToDelete(ownerId); // Set the owner ID to delete
-    setIsConfirmationOpen(true); // Open the confirmation modal
+    setStudentToDelete(ownerId);
+    setIsConfirmationOpen(true);
   };
 
   const closeConfirmation = () => {
-    setStudentToDelete(null); // Reset the owner ID
-    setIsConfirmationOpen(false); // Close the confirmation modal
+    setStudentToDelete(null);
+    setIsConfirmationOpen(false);
   };
 
   const handleDelete = async () => {
@@ -61,19 +60,16 @@ const ListStudents = () => {
       const response = await dispatch(deleteStudent(studentToDelete)).unwrap();
       if (response.status) {
         toast.success("Deleted SuccessFully");
-        dispatch(getStudentsData(schoolById?._id));
+        dispatch(getStudentsData(id));
         closeConfirmation();
       }
     } catch (err) {
       toast.error("Error", err);
-      toast.error(err);
     }
   };
 
   return (
     <div className="p-8">
-      <ToastContainer />
-      {/* Header with the Register School button */}
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Students({students?.length})</h6>
         <Link to={`add-student`}>
@@ -86,13 +82,11 @@ const ListStudents = () => {
         </Link>
       </div>
 
-      {/* Teachers List Table */}
 
       <div className="overflow-x-auto">
-        {loading ? ( // Conditional rendering based on loading state
+        {loading ? ( 
           <div className="flex justify-center items-center py-10">
             <span className="loader"></span>{" "}
-            {/* Add your loading spinner or text here */}
             <p className="ml-2">Loading Students Data ...</p>
           </div>
         ) : (
@@ -101,6 +95,7 @@ const ListStudents = () => {
               <tr className="bg-gray-100 text-left">
                 <th className="py-3 px-4 border-b-2">Name</th>
                 <th className="py-3 px-4 border-b-2">Gender</th>
+                <th className="py-3 px-4 border-b-2">Class</th>
                 <th className="py-3 px-4 border-b-2">Number</th>
                 <th className="py-3 px-4 border-b-2">Email</th>
                 <th className="py-3 px-4 border-b-2">Actions</th>
@@ -121,6 +116,7 @@ const ListStudents = () => {
                       {data.firstname} {data.lastname}
                     </td>
                     <td className="py-3 px-4 border-b">{data.gender}</td>
+                    <td className="py-3 px-4 border-b">{data.class?.className} {data.class?.section}</td>
                     <td className="py-3 px-4 border-b">{data.phone}</td>
                     <td className="py-3 px-4 border-b">{data.email}</td>
                     <td className="py-3 px-4 border-b">

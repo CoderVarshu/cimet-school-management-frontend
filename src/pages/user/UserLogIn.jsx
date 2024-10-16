@@ -12,6 +12,7 @@ const UserLogIn = () => {
   const dispatch = useDispatch();
   const [schoolDetails, setSchoolDetails] = useState([]);
   const schoolsData = useSelector(allSchoolData);
+  const [role, setRole] = useState('')
 
   useEffect(() => {
     dispatch(getSchool());
@@ -36,20 +37,42 @@ const UserLogIn = () => {
         if (passwordValidation.error) {
           errors.password = passwordValidation.message;
         }
+        if(!role){
+          errors.role = "Select Role"
+        }
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
-        try {
-          const response = await dispatch(loginUser(values)).unwrap(); // Await the loginUser function
-          if (response.status) {
-            toast.success(response.message);
-            navigate(`/school/${values.schoolId}`);
-            resetForm()
-          } else {
-            toast.error(response.message);
-          }
-        } catch (error) {
-          toast.error("An error occurred during login.", error);
+           
+        if(role ===  'student'){
+
+          dispatch(loginUser(values)).then((response)=>{
+            if (response.status) {
+              toast.success(response.message);
+              navigate(`/school/${values.schoolId}`);
+              resetForm()
+            } else {
+              toast.error(response.message);
+            }
+          }).catch((error)=>{
+             toast.error(error.message)
+          })
+
+        } else if(role === 'teacher'){
+          dispatch(loginUser(values)).then((response)=>{
+            if (response.status) {
+              toast.success(response.message);
+              navigate(`/school/${values.schoolId}`);
+              resetForm()
+            } else {
+              toast.error(response.message);
+            }
+          }).catch((error)=>{
+             toast.error(error.message)
+          })
+
+        } else{
+          toast.warning("Role Not Specified")
         }
       }}
     >
@@ -89,6 +112,22 @@ const UserLogIn = () => {
                   </option>
                 ))}
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Select Role
+            </label>
+            <select
+            name="role"
+            value={role} onChange={(e)=> e.target.value}
+             className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="" >Select Role</option>
+              <option value={'teacher'}>Teacher</option>
+              <option value={'student'}>Student</option>
+            </select>
+            {!role && errors.role ? (
+              <div className="text-red-500 text-sm mt-1">{errors.role}</div>
+            ) : null}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">

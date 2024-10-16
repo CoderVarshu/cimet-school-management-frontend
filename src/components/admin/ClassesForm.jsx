@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { fetchClasses, newClass } from "../../redux/slices/classSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
@@ -14,9 +14,9 @@ const ClassesForm = () => {
     schoolId: id,
     className: "",
     section: "",
-    subject: [],
-    student: [],
-    teacher: [],
+    subjects: [],
+    students: [],
+    teachers: [],
   });
 
   const handleInputChange = (e) => {
@@ -30,20 +30,20 @@ const ClassesForm = () => {
   const handleSubjectChange = (selectedSubjects) => {
     setClassDetails({
       ...getClassDetails,
-      subject: selectedSubjects,
+      subjects: selectedSubjects,
     });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        console.log("DTA", getClassDetails)
+      console.log("DTA", getClassDetails)
       const response = await dispatch(newClass(getClassDetails)).unwrap();
 
       if (response.status) {
         toast.success(response.message);
         dispatch(fetchClasses(id));
         navigate(-1);
-        setTimeout(() => {}, 1000);
+        setTimeout(() => { }, 1000);
       }
     } catch (error) {
       toast.error(
@@ -54,7 +54,6 @@ const ClassesForm = () => {
 
   return (
     <div className="flex justify-center m-5 items-center ">
-      <ToastContainer />
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           Add Class Details
@@ -87,20 +86,11 @@ const ClassesForm = () => {
             />
           </div>
           <div className="mb-4">
-            {/* <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Subject
-                        </label>
-                        <input
-                            type="text"
-                            name="subject"
-                            value={getClassDetails.subject}
-                            onChange={handleInputChange}
-                            className="w-full p-2 border border-gray-300 rounded"
-                        /> */}
+
             <SelectSubject
               onChange={handleSubjectChange}
               multiple={true}
-              selectedSubject={getClassDetails.subject}
+              selectedSubject={getClassDetails.subjects}
             />
           </div>
 

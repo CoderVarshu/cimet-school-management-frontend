@@ -21,8 +21,7 @@ export const getStudentsData = createAsyncThunk(
         const response = await axios.get(
           `${base_url}/student/get-students?schoolId=${schoolId}`
         );
-        console.log("API RESPONSE", response);
-        return response.data.users;
+        return response.data;
       } catch (err) {
         return err;
       }
@@ -34,11 +33,12 @@ export const getStudentsData = createAsyncThunk(
     "student/updateStudent",
     async (stdDetails, { rejectWithValue }) => {
       try {
+        console.log("STD", stdDetails)
         const response = await axios.put(
-          `${base_url}/user/update-user/${stdDetails._id}`,  // Assuming you're passing the school ID in `schoolDetails`
+          `${base_url}/student/update-student/${stdDetails._id}`,
           stdDetails
         );
-        return response.data;  // Returning the updated school data
+        return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
       }
@@ -48,12 +48,11 @@ export const getStudentsData = createAsyncThunk(
   export const deleteStudent = createAsyncThunk(
     "teacher/deleteTeacher",
     async (studentId, { rejectWithValue }) => {
-      console.log("IDD", studentId)
       try {
-        const response = await axios.delete(`${base_url}/user/delete-user/${studentId}`); // Assuming you're passing the school ID as a parameter
-        return response.data; // Return the response data if needed (e.g., success message)
+        const response = await axios.delete(`${base_url}/user/delete-user/${studentId}`);
+        return response.data;
       } catch (err) {
-        return rejectWithValue(err.response?.data || err.message); // Handle errors gracefully
+        return rejectWithValue(err.response?.data || err.message);
       }
     }
   );
@@ -78,17 +77,16 @@ const studentsSlice = createSlice({
         (state.loading = false), (state.error = action.error.message);
       });
 
-      
-    builder.addCase(registerStudent.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(registerStudent.fulfilled, (state, action) => {
-      state.loading = false;
-      state.studentsData.push(action.payload);
-    });
-    builder.addCase(registerStudent.rejected, (state, action) => {
-      (state.loading = false), (state.error = action.error.message);
-    });
+    // builder.addCase(registerStudent.pending, (state) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(registerStudent.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.studentsData = [...state.studentsData, action.payload];
+    // });
+    // builder.addCase(registerStudent.rejected, (state, action) => {
+    //   (state.loading = false), (state.error = action.error.message);
+    // });
   },
 });
 

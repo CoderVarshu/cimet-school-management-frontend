@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   addSubject,
   editSubject,
@@ -71,7 +71,6 @@ const SubjectForm = ({
 
   return (
     <div className="flex justify-center m-5 items-center ">
-      <ToastContainer />
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
         {type === 'Update' ? 'Update Subject details' : "Add Subject Details" }

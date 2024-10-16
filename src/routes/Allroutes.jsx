@@ -15,11 +15,16 @@ import ListSubject from "../components/ListSubject";
 import SubjectForm from "../components/admin/SubjectForm";
 import ListAssignments from "../components/ListAssignments";
 import AssignmentsForm from "../components/admin/AssignmentsForm";
+import { LandingPage } from "../pages/LandingPage";
 
 const router = createBrowserRouter([
     {
+        path:'/',
+        element:<LandingPage />
+    },
+    {
         path: '/admin-dashboard',
-        element: <Wrapper />,
+        element:<PrivateRoute> <Wrapper /> </PrivateRoute>,
     },
     {
         path: '/register',
@@ -46,7 +51,6 @@ const router = createBrowserRouter([
                     },
                 ]
             },
-
             {
                 path: 'student/list-students',
                 children: [

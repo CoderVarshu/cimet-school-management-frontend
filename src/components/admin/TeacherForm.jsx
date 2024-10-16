@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import { registerTeacher } from "../../redux/slices/teacherSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getTeachersData, registerTeacher } from "../../redux/slices/teacherSlice";
 import SelectClass from "../common/SelectClass";
 
 const TeacherForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
-  const schoolId = queryParams.get('schoolId');
+   const {id} = useParams()
 
   const [showPassword, setShowPassword] = useState(false);
   const [getUserDetails, setUserDetails] = useState({
-    schoolId,
+    schoolId: id,
     firstname: "",
     lastname: "",
     gender: "male",
     email: "",
     phone: "",
-    class: ["12A"],
+    class: [""],
+    salary:'',
     role: "teacher",
     password: "",
   });
@@ -32,35 +32,37 @@ const TeacherForm = () => {
     });
   };
 
+  const handleClassChange=(selectedClass)=>{
+    setUserDetails({
+      ...getUserDetails, class:selectedClass
+    })
+  }
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await dispatch(registerTeacher(getUserDetails)).unwrap();
-      console.log("RESPONSE", response)
-      if (response.status) {
-        toast.success(response.message);
-
-        setTimeout(() => {
-          navigate(-1);
-        }, 1000);
+     dispatch(registerTeacher(getUserDetails)).then((res)=>{
+      if(res?.payload?.message){
+        toast.success(res?.payload?.message);
+        navigate(-1);
+        dispatch(getTeachersData(id))
       }
-    } catch (error) {
-      toast.error(error.error || "Something went wrong. Please try again.");
-      console.error("Error222:", error);
-    }
+      if(res?.payload?.error){
+        toast.warning(res?.payload?.error)
+      }
+     }).catch((eror)=>{
+        toast.error(eror?.message)
+     })
   };
 
   return (
     <div className="flex justify-center m-5 items-center min-h-screen ">
-      <ToastContainer />
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Add Teacher Details</h2>
         <form onSubmit={handleSubmit}>
-          {/* Name Fields */}
           <div className="flex mb-4 space-x-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -90,9 +92,7 @@ const TeacherForm = () => {
             </div>
           </div>
 
-          {/* Gender Field */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
             <select
               name="gender"
               value={getUserDetails.gender}
@@ -104,7 +104,6 @@ const TeacherForm = () => {
             </select>
           </div>
 
-          {/* Email Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <input
@@ -117,7 +116,6 @@ const TeacherForm = () => {
             />
           </div>
 
-          {/* Phone Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
             <input
@@ -130,13 +128,23 @@ const TeacherForm = () => {
             />
           </div>
           <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Salary</label>
+            <input
+              type="number"
+              name="salary"
+              value={getUserDetails.salary}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
             <SelectClass
-              schoolId={schoolId}
-
+              onChange={handleClassChange}
+              selectedClasses={getUserDetails.class}
             />
           </div>
 
-          {/* Password Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <div className="relative">
@@ -157,7 +165,6 @@ const TeacherForm = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"

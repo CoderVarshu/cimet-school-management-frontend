@@ -10,6 +10,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
   const subjectData = useSelector(getSubjectData);
   const [subjects, setSubjects] = useState([]);
 
+  console.log("SELECTED", selectedSubject)
   useEffect(() => {
     if (id) {
       dispatch(fetchSubjects(id));
@@ -39,10 +40,11 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
       </label>
       <div className="flex flex-wrap mb-4">
         {selectedSubject.map((subjectId) => {
+          console.log("SSS", subjectId)
           const subject = subjects.find((cls) => cls._id === subjectId);
           return (
             subject && (
-              <div key={subjectId} className="flex items-center bg-blue-200 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2">
+              <div key={subjectId} className="flex items-center bg-orange-500 text-white rounded-full px-3 py-1 mr-2 mb-2">
                 <span>{subject.subjectName}</span>
                 <button onClick={() => handleRemove(subjectId)} className="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
               </div>
@@ -50,7 +52,6 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
           );
         })}
       </div>
-
       <select
         onChange={handleChange}
         multiple={multiple}

@@ -21,7 +21,6 @@ export const registerTeacher = createAsyncThunk(
   async (info, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${base_url}/teacher/add-teacher/${info.schoolId}`, info);
-      console.log("APIN RES", response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -38,6 +37,7 @@ export const editTeacher = createAsyncThunk(
         `${base_url}/teacher/update-teacher/${teacherDetails._id}`,  // Assuming you're passing the school ID in `schoolDetails`
         teacherDetails
       );
+      console.log("APII", response)
       return response.data;  // Returning the updated school data
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -74,29 +74,28 @@ const teacherSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getTeachersData.fulfilled, (state, action) => {
-      // Ensure action.payload is an array of plain objects
       state.loading = false;
-      state.teachersData = action.payload; // should be a plain array of objects
+      state.teachersData = action.payload;
     });
     
     builder.addCase(getTeachersData.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message; // Ensure you capture the error message
+      state.error = action.error.message;
     });
     
 
-    // add new teacher 
+    // // add new teacher 
 
-    builder.addCase(registerTeacher.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(registerTeacher.fulfilled, (state, action) => {
-      state.loading = false;
-      state.teachersData.push(action.payload);
-    });
-    builder.addCase(registerTeacher.rejected, (state, action) => {
-      (state.loading = false), (state.error = action.error.message);
-    });
+    // builder.addCase(registerTeacher.pending, (state) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(registerTeacher.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.teachersData.push(action.payload);
+    // });
+    // builder.addCase(registerTeacher.rejected, (state, action) => {
+    //   (state.loading = false), (state.error = action.error.message);
+    // });
   },
 });
 

@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import { registerStudent } from "../../redux/slices/studentsSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getStudentsData, registerStudent } from "../../redux/slices/studentsSlice";
+import SelectClass from "../common/SelectClass";
 
 const StudentForm = () => {
   const dispatch = useDispatch();
+  const {id} = useParams()
   //schoolId,firstname, lastname,gender,email,phone,class:classArray,role,password,
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [getUserDetails, setUserDetails] = useState({
-    schoolId: "670be3720823163c55cde061",
+    schoolId: id,
     firstname: "",
     lastname: "",
     gender: "male",
     email: "",
     phone: "",
-    class: ["12A"],
+    class: [],
     role: "student",
     password: "",
   });
@@ -33,31 +35,36 @@ const StudentForm = () => {
     setShowPassword(!showPassword);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await dispatch(registerStudent(getUserDetails)).unwrap();
       if (response.status) {
         toast.success(response.message);
+        dispatch(getStudentsData(id))
         setTimeout(() => {
           navigate(-1);
         }, 1000);
       }
     } catch (error) {
       toast.error(error.error || "Something went wrong. Please try again.");
-      console.error("Error222:", error);
     }
   };
 
+  const handleClassChange=(selectedClass)=>{
+    setUserDetails({
+      ...getUserDetails, class:selectedClass
+    })
+  }
+
   return (
     <div className="flex justify-center m-5 items-center h-fit">
-      <ToastContainer />
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           Add Student Details
         </h2>
         <form onSubmit={handleSubmit}>
-          {/* Name Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               First Name
@@ -98,7 +105,6 @@ const StudentForm = () => {
               <option value="female">Female</option>
             </select>
           </div>
-          {/* Email Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
@@ -112,7 +118,6 @@ const StudentForm = () => {
               required
             />
           </div>
-          {/* Phone Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Phone
@@ -127,16 +132,9 @@ const StudentForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Class
-            </label>
-            <input
-              type="text"
-              name="class"
-              value={getUserDetails.class}
-              onChange={() => {}}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
+            <SelectClass
+              onChange={handleClassChange}
+              selectedClass = {getUserDetails.class}
             />
           </div>
           <div className="mb-4">
@@ -161,7 +159,6 @@ const StudentForm = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"

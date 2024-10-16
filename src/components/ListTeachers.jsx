@@ -7,13 +7,11 @@ import ConfirmationModal from "./ConfirmationModal"
 import { Link, useParams } from "react-router-dom"
 import Modal from "./Modal"
 import UpdateTeachersForm from "./admin/UpdateTeachersForm"
-import { selectSchoolById } from "../redux/slices/schoolSlice"
-import { toast, ToastContainer } from "react-toastify"
+import { toast} from "react-toastify"
 
 const ListTeachers = () => {
 
   const {id} = useParams()
-  const schoolById = useSelector((state) => selectSchoolById(state, id));
  
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacherUpdate, setSelectedTeacherUpdate] = useState(null);
@@ -26,14 +24,17 @@ const ListTeachers = () => {
   const loading = useSelector(teachersLoading)
 
   useEffect(()=>{
-    if(schoolById?._id){
-   dispatch(getTeachersData(schoolById?._id))
+    if(id){
+   dispatch(getTeachersData(id))
     }
-  }, [schoolById?._id])
+  }, [id])
 
 useEffect(()=>{
-  setTeachers(data)
+  if(data){
+  setTeachers(data.data)
+  }
 },[data])
+
 
   const openEditModal = (data) => {
     setSelectedTeacherUpdate(data);
@@ -60,7 +61,7 @@ useEffect(()=>{
       const response = await dispatch(deleteTeacher(teacherToDelete)).unwrap();
       if (response.status) {
         toast.success("Deleted SuccessFully");
-        dispatch(getTeachersData(schoolById?._id));
+        dispatch(getTeachersData(id));
         closeConfirmation();
       }
     } catch (err) {
@@ -70,9 +71,8 @@ useEffect(()=>{
 
   return (
     <div className="p-8">
-       <ToastContainer />
     <div className="flex justify-between items-center mb-6">
-      <h6 className="text-xl font-bold">All Teachers({teachers.length || 0})</h6>
+      <h6 className="text-xl font-bold">All Teachers({teachers?.length || 0})</h6>
         <Link to={`add-teacher`}>
         <button
           type="button"
@@ -81,6 +81,7 @@ useEffect(()=>{
         </button>
       </Link>
     </div>
+
     <div className="overflow-x-auto">
       {loading ? ( 
         <div className="flex justify-center items-center py-10">
@@ -95,6 +96,7 @@ useEffect(()=>{
               <th className="py-3 px-4 border-b-2">Gender</th>
               <th className="py-3 px-4 border-b-2">Number</th>
               <th className="py-3 px-4 border-b-2">Email</th>
+              <th className="py-3 px-4 border-b-2">Salary</th>
               <th className="py-3 px-4 border-b-2">Actions</th>
             </tr>
           </thead>
@@ -105,12 +107,13 @@ useEffect(()=>{
                   No Teachers Data available
                 </td>
               </tr>
-            ) : (teachers.length &&  teachers?.map((data, i) => (
+            ) : (teachers?.length &&  teachers?.map((data, i) => (
                 <tr key={i} className="hover:bg-gray-100">
                <td className="py-3 px-4 border-b"> {data.firstname} {data.lastname}</td>
                   <td className="py-3 px-4 border-b">{data.gender}</td>
                   <td className="py-3 px-4 border-b">{data.phone}</td>
                   <td className="py-3 px-4 border-b">{data.email}</td>
+                  <td className="py-3 px-4 border-b">{data.salary}</td>
                   <td className="py-3 px-4 border-b">
                     <button
                       onClick={() => openEditModal(data)}
@@ -136,7 +139,6 @@ useEffect(()=>{
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <UpdateTeachersForm
-          type="Update"
           selectedTeacherUpdate={selectedTeacherUpdate}
           setSelectedTeacherUpdate={setSelectedTeacherUpdate}
           closeModal={closeModal}

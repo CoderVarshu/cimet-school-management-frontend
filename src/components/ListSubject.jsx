@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   deleteSubject,
   fetchSubjects,
@@ -64,6 +64,7 @@ const ListSubject = () => {
       const response = await dispatch(deleteSubject(subjectToDelete)).unwrap();
       if (response.status) {
         toast.success("Deleted Successfully");
+        closeConfirmation()
       }
     } catch (error) {
       toast.error(error.message);
@@ -72,7 +73,6 @@ const ListSubject = () => {
 
   return (
     <div className="p-8">
-      <ToastContainer />
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Subjects({subjects?.length})</h6>
         <Link to={`add-subject`}>

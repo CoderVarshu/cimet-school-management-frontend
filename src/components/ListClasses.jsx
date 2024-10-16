@@ -5,7 +5,7 @@ import { selectSchoolById } from "../redux/slices/schoolSlice"
 import { useEffect, useState } from "react"
 import { classesLoading, deleteClass, fetchClasses, getClassesData } from "../redux/slices/classSlice"
 import { Link, useParams } from "react-router-dom"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 import Modal from "./Modal"
 import { BiSolidEdit } from "react-icons/bi"
 import { AiOutlineDelete } from "react-icons/ai"
@@ -24,8 +24,6 @@ const ListClasses = () => {
   const dispatch = useDispatch()
   const loading = useSelector(classesLoading)
   const classesData = useSelector(getClassesData)
-
-  console.log("CLASS", classesData)
 
   useEffect(() => {
     if (schoolById) {
@@ -75,7 +73,6 @@ const ListClasses = () => {
 
   return (
     <div className="p-8">
-      <ToastContainer />
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Classess({classes.length || 0})</h6>
         <Link to={`add-class`}>
@@ -86,12 +83,8 @@ const ListClasses = () => {
           </button>
         </Link>
       </div>
-
-
-
       <div className="overflow-x-auto">
         {loading ? (
-
           <div className="flex justify-center items-center py-10">
             <span className="loader"></span>{" "}
             <p className="ml-2">Loading Classes Data ...</p>
@@ -102,7 +95,7 @@ const ListClasses = () => {
               <tr className="bg-gray-100 text-left">
                 <th className="py-3 px-4 border-b-2">Name</th>
                 <th className="py-3 px-4 border-b-2">Section</th>
-
+                <th className="py-3 px-4 border-b-2">Subjects</th>
                 <th className="py-3 px-4 border-b-2">Actions</th>
               </tr>
             </thead>
@@ -117,7 +110,18 @@ const ListClasses = () => {
                 <tr key={i} className="hover:bg-gray-100">
                   <td className="py-3 px-4 border-b"> {data.className}</td>
                   <td className="py-3 px-4 border-b">{data.section}</td>
-
+                  <td className="py-3 px-4 border-b">
+                    {data.subjects.length > 0 ? (
+                      data.subjects.map((subject, index) => (
+                        <span key={index}>
+                          {subject.subjectName}
+                          {index !== data.subjects.length - 1 && ', '}
+                        </span>
+                      ))
+                    ) : (
+                      <span></span>
+                    )}
+                  </td>
                   <td className="py-3 px-4 border-b">
                     <button
                       onClick={() => openEditModal(data)}

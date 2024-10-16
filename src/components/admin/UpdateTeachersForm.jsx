@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify"
 import { editTeacher, getTeachersData } from "../../redux/slices/teacherSlice";
 import { useDispatch } from "react-redux";
+import SelectClass from "../common/SelectClass";
 
 const UpdateTeachersForm = ({ selectedTeacherUpdate,
   setSelectedTeacherUpdate,
@@ -13,7 +14,6 @@ const UpdateTeachersForm = ({ selectedTeacherUpdate,
     e.preventDefault();
     try {
       const response = await dispatch(editTeacher(selectedTeacherUpdate)).unwrap();
-      console.log("RESPONSE", response)
       if (response.status) {
         toast.success(response.message);
         dispatch(getTeachersData(selectedTeacherUpdate?.schoolId))
@@ -28,14 +28,17 @@ const UpdateTeachersForm = ({ selectedTeacherUpdate,
   };
 
 
-
+  const handleClassChange =(selectedClass)=>{
+    setSelectedTeacherUpdate({
+      ...selectedTeacherUpdate, class:selectedClass
+    })
+  }
 
   return (
-    <div className="flex justify-center m-5 items-center min-h-screen ">
-      <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center m-5 items-center min-h-fit">
+      <div className="flex flex-col w-full mx-auto p-8 bg-white rounded-lg ">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit Teacher Details</h2>
         <form onSubmit={handleSubmit}>
-          {/* Name Fields */}
           <div className="flex mb-4 space-x-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -74,9 +77,8 @@ const UpdateTeachersForm = ({ selectedTeacherUpdate,
               />
             </div>
           </div>
-
-          {/* Gender Field */}
-          <div className="mb-4">
+          <div className="flex mb-4 space-x-4">
+          <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
             <select
               name="gender"
@@ -94,26 +96,17 @@ const UpdateTeachersForm = ({ selectedTeacherUpdate,
             </select>
           </div>
 
-          {/* Email Field */}
+          <div className="flex-1">
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={selectedTeacherUpdate ? selectedTeacherUpdate.email : ""}
-              onChange={(e) =>
-                setSelectedTeacherUpdate({
-                  ...selectedTeacherUpdate,
-                  email: e.target.value,
-                })
-              }
-              className="w-full p-2 border border-gray-300 rounded"
-              required
+          <SelectClass
+              onChange={handleClassChange}
+              selectedClasses={selectedTeacherUpdate.class._id}
             />
           </div>
-
-          {/* Phone Field */}
-          <div className="mb-4">
+          </div>
+           </div>
+           <div className="flex mb-4 space-x-4">
+          <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
             <input
               type="tel"
@@ -129,46 +122,45 @@ const UpdateTeachersForm = ({ selectedTeacherUpdate,
               required
             />
           </div>
-
-          {/* Class Field */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Salary</label>
             <input
               type="text"
-              name="class"
-              value={selectedTeacherUpdate ? selectedTeacherUpdate.class : ""}
-              onChange={() => { }}
+              name="salary"
+              value={selectedTeacherUpdate ? selectedTeacherUpdate.salary : ""}
+              onChange={(e) =>
+                setSelectedTeacherUpdate({
+                  ...selectedTeacherUpdate,
+                  salary: e.target.value,
+                })
+              }
               className="w-full p-2 border border-gray-300 rounded"
               required
             />
           </div>
-
-          {/* Password Field */}
-          {/* <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={getUserDetails.password}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-              <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                onClick={toggleShowPassword}
-              >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
-              </span>
-            </div>
-          </div> */}
-
-          {/* Submit Button */}
-          <div className="mt-6">
+          </div>
+          
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={selectedTeacherUpdate ? selectedTeacherUpdate.email : ""}
+              onChange={(e) =>
+                setSelectedTeacherUpdate({
+                  ...selectedTeacherUpdate,
+                  email: e.target.value,
+                })
+              }
+              className="w-full p-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+          
+          <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="bg-black text-white px-4 py-2 rounded hover:bg-black-600 w-full"
+              className="bg-black w-fit text-white px-4 py-2 rounded hover:bg-black-600"
             >
               Edit Teacher
             </button>

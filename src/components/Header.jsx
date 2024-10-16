@@ -8,7 +8,7 @@ import { isAdminAuth, isAuth, logoutUser } from "../redux/slices/authSlice";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
-  const authenticated = useSelector(isAdminAuth); // Get auth state from Redux
+  const authenticated = useSelector(isAdminAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("");
@@ -16,15 +16,14 @@ const Header = () => {
   const modalRef = useRef(null);
 
   const handleLogout = () => {
-    dispatch(logoutUser()); // Dispatch logout action
-    setShowModal(false); // Close modal
-    navigate("/adminlogin"); // Redirect to login page
+    dispatch(logoutUser());
+    setShowModal(false);
+    navigate("/adminlogin");
   };
 
-  // Function to handle Login
   const handleLogin = () => {
-    setShowModal(false); // Close modal
-    // navigate("/adminlogin"); // Redirect to login page
+    setShowModal(false);
+    navigate("/login");
   };
 
   const getInitials = (name) => {

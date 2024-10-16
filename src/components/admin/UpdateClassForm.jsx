@@ -1,12 +1,14 @@
 import { useDispatch } from "react-redux"
 import { editClass, fetchClasses } from "../../redux/slices/classSlice";
 import { toast } from "react-toastify";
+import SelectSubject from "../common/SelectSubject";
+import { useEffect } from "react";
 
-const UpdateClassForm = ({selectedClassUpdate, setSelectedClassUpdate, closeModal}) => {
+const UpdateClassForm = ({ selectedClassUpdate, setSelectedClassUpdate, closeModal }) => {
 
-const dispatch = useDispatch()
-
-const handleSubmit = async (e) => {
+  const dispatch = useDispatch()
+  console.log("Selected", selectedClassUpdate)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await dispatch(editClass(selectedClassUpdate)).unwrap();
@@ -20,8 +22,25 @@ const handleSubmit = async (e) => {
     }
   };
 
+  const handleSubjectChange = (selectedSubjects) => {
+    setSelectedClassUpdate({
+      ...selectedClassUpdate,
+      subjects: selectedSubjects,
+    });
+  };
+
+  useEffect(() => {
+    if (selectedClassUpdate.subjects.length) {
+      console.log("selectedClassUpdate.subjects",selectedClassUpdate.subjects)
+      setSelectedClassUpdate((prev) => ({
+        ...prev,
+        subjects: selectedClassUpdate.subjects,
+      }));
+    }
+  }, [selectedClassUpdate.subjects, setSelectedClassUpdate]);
+
   return (
-    <div className="flex justify-center m-5 items-center min-h-screen ">
+    <div className="flex justify-center m-5 items-center min-h-fit">
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg ">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit Class Details</h2>
         <form onSubmit={handleSubmit}>
@@ -64,18 +83,10 @@ const handleSubmit = async (e) => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-            <input
-              type="text"
-              name="subject"
-              value={selectedClassUpdate ? selectedClassUpdate.subject : ""}
-              onChange={(e) =>
-                setSelectedClassUpdate({
-                  ...selectedClassUpdate,
-                  subject: e.target.value,
-                })
-              }
-              className="w-full p-2 border border-gray-300 rounded"
+            <SelectSubject
+              onChange={handleSubjectChange}
+              multiple={true}
+              selectedSubject={selectedClassUpdate.subjects}
             />
           </div>
           <div className="mt-6">
