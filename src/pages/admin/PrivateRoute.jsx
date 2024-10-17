@@ -1,22 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { isAdminAuth, isAuth } from "../../redux/slices/authSlice";
-import Cookies from "js-cookie"; 
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const PrivateRoute = ({ children }) => {
-  const [isAuthenticate, setIsAuthenticate] = useState(true);
+  const navigate = useNavigate()
+  const [isAuthenticate, setIsAuthenticate] = useState(false);
 
-  const authenticate = useSelector(isAdminAuth);
-
+  const token = Cookies.get('token');
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+  
   useEffect(() => {
-    const token = Cookies.get('adminAuthToken');
-    setIsAuthenticate(authenticate || token ? true : false ); 
-  }, [authenticate]);
+    if (token && role === 'admin') {
+      setIsAuthenticate(true);
+    } else {
+      navigate("/adminlogin");
+    }
+  }, [token, role, navigate]);
 
-
-  return isAuthenticate ? children : <Navigate to="/adminlogin" />;
+  return isAuthenticate ? children : null;
 };
 
 export default PrivateRoute;

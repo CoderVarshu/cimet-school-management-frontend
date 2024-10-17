@@ -4,17 +4,21 @@ import SideNavButton from "../SideNavButton";
 
 const SideNavForStd = ({ setSelectedComponent, selectedComponent }) => {
 
-   const data= ["Teachers", "Courses", "Classes", "Assignments", "Profile"]
-
-
+  const data = [
+    { name: "Teachers", path: "teacher/list-teachers" },
+    { name: "Subjects", path: "subjects/list-subjects" },
+    { name: "Classes", path: "classes/list-classes" },
+    { name: "Assignments", path: "assignments/list-assignments" },
+    { name : "Profile", path:'profile' }
+  ];
   return (
-    <nav className="flex flex-col  p-4 bg-slate-900 h-full">
+   <nav className="flex flex-col text-center text-l text-white font-semibold p-4 bg-slate-900 h-full">
       {data.map((item, i)=>(
-        <SideNavButton
+        <SideNavButton 
         key={i} 
-        value={item} 
-        isActive={selectedComponent === item}
-        setSelectedComponent={setSelectedComponent} />
+        value={item.name} 
+        path={item.path}
+      />
       ))}
     </nav>
   );

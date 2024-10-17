@@ -11,6 +11,8 @@ import { toast} from "react-toastify"
 
 const ListTeachers = () => {
 
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+
   const {id} = useParams()
  
   const [teachers, setTeachers] = useState([]);
@@ -73,13 +75,14 @@ useEffect(()=>{
     <div className="p-8">
     <div className="flex justify-between items-center mb-6">
       <h6 className="text-xl font-bold">All Teachers({teachers?.length || 0})</h6>
+      { role === 'admin' ?
         <Link to={`add-teacher`}>
         <button
           type="button"
           className="bg-black text-white px-4 py-2 rounded">
           + Add Teacher
         </button>
-      </Link>
+      </Link> :''}
     </div>
 
     <div className="overflow-x-auto">
@@ -97,7 +100,8 @@ useEffect(()=>{
               <th className="py-3 px-4 border-b-2">Number</th>
               <th className="py-3 px-4 border-b-2">Email</th>
               <th className="py-3 px-4 border-b-2">Salary</th>
-              <th className="py-3 px-4 border-b-2">Actions</th>
+              { role === 'admin' ?
+              <th className="py-3 px-4 border-b-2">Actions</th> :''}
             </tr>
           </thead>
           <tbody>
@@ -114,6 +118,7 @@ useEffect(()=>{
                   <td className="py-3 px-4 border-b">{data.phone}</td>
                   <td className="py-3 px-4 border-b">{data.email}</td>
                   <td className="py-3 px-4 border-b">{data.salary}</td>
+                  { role === 'admin' ?
                   <td className="py-3 px-4 border-b">
                     <button
                       onClick={() => openEditModal(data)}
@@ -127,7 +132,7 @@ useEffect(()=>{
                     >
                       <AiOutlineDelete />
                     </button>
-                  </td>
+                  </td> :''}
                 </tr>
               ))
             )}

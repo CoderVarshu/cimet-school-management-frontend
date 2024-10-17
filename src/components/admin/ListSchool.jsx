@@ -26,9 +26,13 @@ export const ListSchool = () => {
   const loading = useSelector(schoolLoading);
 
   useEffect(() => {
+    localStorage.removeItem('school_id')
+  }, [])
+
+  useEffect(() => {
     setSchools(schoolsData);
   }, [schoolsData, loading]);
-  
+
 
   useEffect(() => {
     dispatch(getSchool());
@@ -39,24 +43,22 @@ export const ListSchool = () => {
     setIsModalOpen(true);
   };
 
-  // Close the modal
   const closeModal = () => {
     setSelectedSchoolUpdate(null);
     setIsModalOpen(false);
   };
 
   const openConfirmation = (ownerId) => {
-    setSchoolToDelete(ownerId); // Set the owner ID to delete
-    setIsConfirmationOpen(true); // Open the confirmation modal
+    setSchoolToDelete(ownerId);
+    setIsConfirmationOpen(true);
   };
 
-  // Close the confirmation modal
   const closeConfirmation = () => {
-    setSchoolToDelete(null); // Reset the owner ID
-    setIsConfirmationOpen(false); // Close the confirmation modal
+    setSchoolToDelete(null);
+    setIsConfirmationOpen(false);
   };
 
-  const handleDelete = async() => {
+  const handleDelete = async () => {
     try {
       const response = await dispatch(deleteSchool(schoolToDelete)).unwrap();
       if (response.status) {
@@ -72,7 +74,6 @@ export const ListSchool = () => {
 
   return (
     <div className="p-8">
-      {/* Header with the Register School button */}
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All School({schools.length})</h6>
         <Link to="/register">
@@ -84,7 +85,6 @@ export const ListSchool = () => {
           </button>
         </Link>
       </div>
-
 
       <div className="overflow-x-auto">
         {loading ? (
@@ -113,7 +113,7 @@ export const ListSchool = () => {
               ) : (
                 schools?.map((school) => (
                   <tr key={school._id} className="hover:bg-gray-100">
-                 <td className="py-3 px-4 border-b"> <Link to={`/school/${school._id}`}>{school.name}</Link></td>
+                    <td className="py-3 px-4 border-b"> <Link to={`/school/${school._id}/teacher/list-teachers`}>{school.name}</Link></td>
                     <td className="py-3 px-4 border-b">{school.phone}</td>
                     <td className="py-3 px-4 border-b">{school.email}</td>
                     <td className="py-3 px-4 border-b">{school.moto}</td>

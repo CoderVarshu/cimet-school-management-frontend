@@ -4,21 +4,34 @@ import { useEffect, useRef, useState } from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { isAdminAuth, isAuth, logoutUser } from "../redux/slices/authSlice";
+import { logoutUser } from "../redux/slices/authSlice";
+import Cookies from "js-cookie";
+import { FaRegUserCircle } from "react-icons/fa";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
-  const authenticated = useSelector(isAdminAuth);
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  const token = Cookies.get('token')
+  const data = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+  const schoolData = localStorage.getItem('school_id') ? JSON.parse(localStorage.getItem('school_id')) : null
+
+  useEffect(() => {
+    if (token) {
+      setIsAuthenticated(true)
+    }
+  }, [token])
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState("");
 
   const modalRef = useRef(null);
 
   const handleLogout = () => {
     dispatch(logoutUser());
     setShowModal(false);
-    navigate("/adminlogin");
+    navigate("/login");
   };
 
   const handleLogin = () => {
@@ -27,7 +40,7 @@ const Header = () => {
   };
 
   const getInitials = (name) => {
-    return name ? name.charAt(0).toUpperCase() : "";
+    return name?.charAt(0).toUpperCase()
   };
 
   useEffect(() => {
@@ -48,13 +61,19 @@ const Header = () => {
     };
   }, [showModal]);
 
-
   return (
     <header className="bg-black text-white p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">Welcome Varsha</h1>
+      <h2 className="font-bold">
+        {role === 'admin' ? "Admin Dashboard " :
+          <> {data ? `Hello ${data?.firstname}, Welcome In ${data?.schoolId?.name}` : ""}</>}
+
+        {(role === 'admin' && schoolData) ? `/ ${schoolData?.name}` : ""}
+      </h2>
+
+      <h2 className="font-bold text-xl" >School Management System</h2>
       <div className="flex items-center space-x-4">
         <div className="flex justify-center relative">
-          {/* Notifications Icon */}
+
           <button className="focus:outline-none">
             <IoIosNotificationsOutline color="white" size={30} />
           </button>
@@ -62,25 +81,15 @@ const Header = () => {
             3
           </span>
         </div>
-        {/* Profile Info */}
         <div className="flex items-center">
-          {/* {profilePic ? (
-            <img
-              src={profilePic} // Profile picture URL
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
-          ) : ( */}
           <div className="w-8 h-8 cursor-pointer bg-gray-700 text-white flex items-center justify-center rounded-full" onClick={() => setShowModal(true)}>
-            <span className="text-lg font-bold">{getInitials("Varsha")}</span>
+            {data ? <span className="text-lg font-bold">{getInitials(data?.firstname)}</span> : <FaRegUserCircle />}
           </div>
-          {/* )} */}
           <span className="ml-2">{ }</span>
-
           {showModal && (
             <div ref={modalRef} className="absolute cursor-pointer top-10 right-0  mt-2  rounded-lg z-50">
               <div className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                {authenticated ? (
+                {isAuthenticated ? (
                   <button
                     onClick={handleLogout}
                     className="text-red-500 hover:text-red-700"

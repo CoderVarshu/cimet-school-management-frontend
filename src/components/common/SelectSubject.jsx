@@ -10,7 +10,6 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
   const subjectData = useSelector(getSubjectData);
   const [subjects, setSubjects] = useState([]);
 
-  console.log("SELECTED", selectedSubject)
   useEffect(() => {
     if (id) {
       dispatch(fetchSubjects(id));
@@ -38,8 +37,9 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
       <label className="block text-sm font-medium text-gray-700 mb-2">
         Select Subject
       </label>
+      { multiple ? 
       <div className="flex flex-wrap mb-4">
-        {selectedSubject.map((subjectId) => {
+        {selectedSubject.length && selectedSubject?.map((subjectId) => {
           console.log("SSS", subjectId)
           const subject = subjects.find((cls) => cls._id === subjectId);
           return (
@@ -51,7 +51,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
             )
           );
         })}
-      </div>
+      </div> :''}
       <select
         onChange={handleChange}
         multiple={multiple}

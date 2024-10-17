@@ -22,10 +22,12 @@ const ListStudents = () => {
   const [studentToDelete, setStudentToDelete] = useState(null);
 
   const { id } = useParams();
-  // const schoolById = useSelector((state) => selectSchoolById(state, id));
   const dispatch = useDispatch();
   const data = useSelector(studentsData);
   const loading = useSelector(studenstLoading);
+
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+
 
   useEffect(() => {
     if (id) dispatch(getStudentsData(id));
@@ -72,6 +74,7 @@ const ListStudents = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Students({students?.length})</h6>
+        {role === 'admin' ? 
         <Link to={`add-student`}>
           <button
             type="button"
@@ -79,7 +82,7 @@ const ListStudents = () => {
           >
             + Add Student
           </button>
-        </Link>
+        </Link> :''}
       </div>
 
 
@@ -98,7 +101,9 @@ const ListStudents = () => {
                 <th className="py-3 px-4 border-b-2">Class</th>
                 <th className="py-3 px-4 border-b-2">Number</th>
                 <th className="py-3 px-4 border-b-2">Email</th>
+                {role === 'admin' ? 
                 <th className="py-3 px-4 border-b-2">Actions</th>
+                :''}
               </tr>
             </thead>
             <tbody>
@@ -119,6 +124,7 @@ const ListStudents = () => {
                     <td className="py-3 px-4 border-b">{data.class?.className} {data.class?.section}</td>
                     <td className="py-3 px-4 border-b">{data.phone}</td>
                     <td className="py-3 px-4 border-b">{data.email}</td>
+                    {role === 'admin' ? 
                     <td className="py-3 px-4 border-b">
                       <button
                         onClick={() => openEditModal(data)}
@@ -132,15 +138,13 @@ const ListStudents = () => {
                       >
                         <AiOutlineDelete />
                       </button>
-                    </td>
+                    </td> : ""}
                   </tr>
                 ))
               )}
             </tbody>
           </table>
         )}
-
-        {/* modal for edit  */}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <UpdateStudentForm

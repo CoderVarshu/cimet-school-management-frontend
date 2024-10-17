@@ -5,12 +5,13 @@ import Cookies from 'js-cookie';
 
 
 export const loginUser= createAsyncThunk(
-    'auth/login',async(values,  { rejectWithValue })=>{
+    'auth/userlogin',async(values,  { rejectWithValue })=>{
         try{
          const response = await axios.post(`${base_url}/student/student-login`,values)
          const token = response.data.token;
         Cookies.set('token', token, { expires: 1 });
-        localStorage.setItem('userData', JSON.stringify(response.userData))
+        localStorage.setItem('role', JSON.stringify(response.data.userData?.role))
+        localStorage.setItem('data', JSON.stringify(response.data?.userData))
          return response.data
         }catch(err){
             return rejectWithValue({
@@ -21,12 +22,13 @@ export const loginUser= createAsyncThunk(
     }
 )
 export const loginTeacher= createAsyncThunk(
-  'auth/login',async(values,  { rejectWithValue })=>{
+  'auth/teacherlogin',async(values,  { rejectWithValue })=>{
       try{
        const response = await axios.post(`${base_url}/teacher/teacher-login`,values)
        const token = response.data.token;
       Cookies.set('token', token, { expires: 1 });
-      localStorage.setItem('userData', JSON.stringify(response.userData))
+      localStorage.setItem('role', JSON.stringify(response.data.userData?.role))
+      localStorage.setItem('data', JSON.stringify(response.data.userData))
        return response.data
       }catch(err){
           return rejectWithValue({
@@ -42,10 +44,9 @@ export const adminLogIn = createAsyncThunk(
     async (values, { rejectWithValue }) => {
       try {
         const response = await axios.post(`${base_url}/auth/login`,values);
-        console.log("VALUES APII", response)
         const token = response.data.token;
         Cookies.set('token', token, { expires: 1 });
-        localStorage.setItem('userData', JSON.stringify(response.data.userData.role))
+        localStorage.setItem('role', JSON.stringify(response.data.userData.role))
         return response.data;
       } catch (err) {
         return rejectWithValue({
@@ -60,8 +61,6 @@ export const adminLogIn = createAsyncThunk(
 const authSlice = createSlice({
     name:'auth',
     initialState:{
-        isAdminAuth: false,
-        isAuth:false,
         loading: false,
         authData:[],
         error : null,
@@ -70,10 +69,10 @@ const authSlice = createSlice({
     reducers: {
         logoutUser: (state) => {
             Cookies.remove('token');
-            localStorage.removeItem('userData')
-            state.isAuth = false;
+            localStorage.removeItem('data')
+            localStorage.removeItem('role')
+            localStorage.removeItem('school_id')
             state.authData = [];
-            state.isAdminAuth = false;
           },
     },
     extraReducers:(builder)=>{
@@ -82,10 +81,21 @@ const authSlice = createSlice({
        })
        builder.addCase(loginUser.fulfilled, (state, action)=>{
         state.loading = false
-        state.userData.push(action.payload)
-        state.isAuth = true
+        state.userData = action.payload
        })
        builder.addCase(loginUser.rejected, (state, action)=>{
+        state.loading = false
+        state.error = action.error.message
+       }) 
+
+       builder.addCase(loginTeacher.pending, (state)=>{
+        state.loading = true
+       })
+       builder.addCase(loginTeacher.fulfilled, (state, action)=>{
+        state.loading = false
+        state.userData = action.payload
+       })
+       builder.addCase(loginTeacher.rejected, (state, action)=>{
         state.loading = false
         state.error = action.error.message
        }) 
@@ -95,30 +105,20 @@ const authSlice = createSlice({
        })
        builder.addCase(adminLogIn.fulfilled, (state, action)=>{
         state.loading = false
-        state.authData.push(action.payload)
-        state.isAdminAuth = true
-        // state.isAuth = true
+        state.userData.push(action.payload)
        })
        builder.addCase(adminLogIn.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "An error occurred";
-        state.isAuth = false
     });
     }
 })
 
 export const { logoutUser } = authSlice.actions;
 
-export const login = (state)=>{
-    return state.auth.authData
-}
 
 export const loginLoading=(state)=>{
     return state.auth.loading
-}
-
-export const isAuth = (state)=>{
-    return state.auth.isAuth
 }
 
 export const userData =(state)=>{
@@ -129,8 +129,5 @@ export const logOut =(state)=>{
   return state.auth.logOut
 }
 
-export const isAdminAuth=(state)=>{
-  return state.auth.isAdminAuth
-}
 
 export default authSlice.reducer

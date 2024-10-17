@@ -1,20 +1,33 @@
  
 /* eslint-disable react/prop-types */
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Navigate} from "react-router-dom";
-import { isAuth } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const PrivateRouteUser = ({ children }) => {
-  const [isAuthenticate, setIsAuthenticate] = useState(true);
+  const [isAuthenticate, setIsAuthenticate] = useState(false);
+  
+  const navigate = useNavigate()
 
-  const authenticate = useSelector(isAuth)
+  
+  const token = Cookies.get('token');
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
 
-  useEffect(()=>{
-    setIsAuthenticate(authenticate)
-  }, [authenticate])
+  useEffect(() => {
+    
+    if (token && role) {
+      setIsAuthenticate(true);
+    }
+    else {
+      navigate('/login')
+    }
 
-  return isAuthenticate ? children : <Navigate to="/login" />;
+
+  }, [token, role]);
+
+
+  return isAuthenticate ? children : null;
 };
 
 export default PrivateRouteUser;

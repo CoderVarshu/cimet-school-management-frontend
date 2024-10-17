@@ -20,6 +20,8 @@ const ListSubject = () => {
   const loading = useSelector(subjectloading);
   const subjectsData = useSelector(getSubjectData);
   const dispatch = useDispatch();
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+
 
   const [selectedSubjectUpdate, setSelectedSubjectUpdate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +36,6 @@ const ListSubject = () => {
     if (subjectsData) {
       setSubjects(subjectsData);
     }
-    console.log("Subjects", subjectsData)
   }, [subjectsData]);
 
   const openEditModal = (data) => {
@@ -43,7 +44,6 @@ const ListSubject = () => {
   };
 
 
-  // Close the modal
   const closeModal = () => {
     setSelectedSubjectUpdate(null);
     setIsModalOpen(false);
@@ -75,6 +75,7 @@ const ListSubject = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Subjects({subjects?.length})</h6>
+        {role === 'admin' ? 
         <Link to={`add-subject`}>
           <button
             type="button"
@@ -82,16 +83,15 @@ const ListSubject = () => {
           >
             + Add Subject
           </button>
-        </Link>
+        </Link> :''}
       </div>
 
-      {/* Teachers List Table */}
 
       <div className="overflow-x-auto">
-        {loading ? ( // Conditional rendering based on loading state
+        {loading ? ( 
+
           <div className="flex justify-center items-center py-10">
             <span className="loader"></span>{" "}
-            {/* Add your loading spinner or text here */}
             <p className="ml-2">Loading Subjects Data ...</p>
           </div>
         ) : (
@@ -99,7 +99,9 @@ const ListSubject = () => {
             <thead>
               <tr className="bg-gray-100 text-left">
                 <th className="py-3 px-4 border-b-2">Name</th>
+                {role === 'admin' ? 
                 <th className="py-3 px-4 border-b-2">Actions</th>
+                :''}
               </tr>
             </thead>
             <tbody>
@@ -114,10 +116,9 @@ const ListSubject = () => {
                   <tr key={i} className="hover:bg-gray-100">
                     <td className="py-3 px-4 border-b">
                       {" "}
-                      {console.log("DATA", data)}
                       {data.subjectName}
                     </td>
-                   
+                    {role === 'admin' ? 
                     <td className="py-3 px-4 border-b">
                       <button
                         onClick={() => openEditModal(data)}
@@ -131,7 +132,7 @@ const ListSubject = () => {
                       >
                         <AiOutlineDelete />
                       </button>
-                    </td>
+                    </td> :''}
                   </tr>
                 ))
               )}
@@ -139,7 +140,6 @@ const ListSubject = () => {
           </table>
         )}
 
-        {/* modal for edit  */}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <SubjectForm

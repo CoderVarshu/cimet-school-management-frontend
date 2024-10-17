@@ -9,11 +9,11 @@ import SideNavForAdmin from "../components/SideNavForAdmin";
 
 const SideNav = () => {
   const { id } = useParams();
-  const [selectedComponent, setSelectedComponent] = useState("Teachers");
   const dispatch = useDispatch();
   const schoolById = useSelector((state) => selectSchoolById(state, id));
 
-  const usersData = useSelector(userData);
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+  
 
   useEffect(() => {
     dispatch(getSchool());
@@ -27,16 +27,10 @@ const SideNav = () => {
 
   return (
     <div className="w-1/6 bg-gray-800 text-white">
-      {usersData[0]?.user?.role === "teacher" ? (
-        <SideNavForTeacher
-          selectedComponent={selectedComponent}
-          setSelectedComponent={setSelectedComponent}
-        />
-      ) : usersData[0]?.user?.role === "student" ? (
-        <SideNavForStd
-          selectedComponent={selectedComponent}
-          setSelectedComponent={setSelectedComponent}
-        />
+      {role === "teacher" ? (
+        <SideNavForTeacher />
+      ) : role === "student" ? (
+        <SideNavForStd />
       ) : (
         <SideNavForAdmin />
       )}

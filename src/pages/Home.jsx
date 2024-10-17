@@ -10,7 +10,7 @@ const Home = () => {
       <Header />
       <div className="flex">
         <SideNav />
-        <div className="w-3/4 bg-white p-6">
+        <div className="w-3/4 bg-white p-6 min-h-[70vh]">
           <Outlet />
         </div>
       </div>

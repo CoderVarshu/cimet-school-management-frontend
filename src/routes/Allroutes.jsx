@@ -16,6 +16,9 @@ import SubjectForm from "../components/admin/SubjectForm";
 import ListAssignments from "../components/ListAssignments";
 import AssignmentsForm from "../components/admin/AssignmentsForm";
 import { LandingPage } from "../pages/LandingPage";
+import Profile from "../pages/Profile";
+import PrivateRouteUser from "../pages/user/PrivateRouteUser";
+import PageNotFound from "../pages/PageNotFound";
 
 const router = createBrowserRouter([
     {
@@ -36,18 +39,18 @@ const router = createBrowserRouter([
         children: [
             {
                 index: 'true',
-                element: <ListTeachers />
+                element: <PrivateRouteUser> <ListTeachers /></PrivateRouteUser>
             },
             {
                 path: 'teacher/list-teachers',
                 children: [
                     {
                         index: true,
-                        element: <ListTeachers />,
+                        element: <PrivateRouteUser> <ListTeachers /></PrivateRouteUser>,
                     },
                     {
                         path: 'add-teacher',
-                        element: <TeacherForm />
+                        element:<PrivateRoute> <TeacherForm /></PrivateRoute>
                     },
                 ]
             },
@@ -57,11 +60,11 @@ const router = createBrowserRouter([
 
                     {
                         index: true,
-                        element: <ListStudents />
+                        element: <PrivateRouteUser> <ListStudents /> </PrivateRouteUser>
                     },
                     {
                         path: 'add-student',
-                        element: <StudentForm />
+                        element: <PrivateRoute><StudentForm /> </PrivateRoute>
                     }
                 ]
             },
@@ -70,11 +73,11 @@ const router = createBrowserRouter([
                 children:[
                     {
                         index:true,
-                        element: <ListClasses />
+                        element:<PrivateRouteUser> <ListClasses /></PrivateRouteUser>
                     },
                     {
                         path:'add-class',
-                        element: <ClassesForm />
+                        element: <PrivateRoute> <ClassesForm /> </PrivateRoute>
                     }
                 ]
             },
@@ -83,11 +86,11 @@ const router = createBrowserRouter([
                 children:[
                     {
                         index:true,
-                        element: <ListSubject />
+                        element: <PrivateRouteUser> <ListSubject /> </PrivateRouteUser>
                     },
                     {
                         path:'add-subject',
-                        element: <SubjectForm />
+                        element:<PrivateRoute> <SubjectForm /> </PrivateRoute>
                     }
                 ]
             },
@@ -96,14 +99,18 @@ const router = createBrowserRouter([
                 children:[
                     {
                         index: true,
-                        element: <ListAssignments />
+                        element:<PrivateRouteUser> <ListAssignments /> </PrivateRouteUser>
                     },
                     {
                         path:'add-assignment',
-                        element: <AssignmentsForm />
+                        element:<PrivateRouteUser> <AssignmentsForm /> </PrivateRouteUser>
                     }
                 ]
             },
+            {
+                path:'profile',
+                element: <PrivateRouteUser> <Profile /> </PrivateRouteUser>
+            }
         ]
     },
     {
@@ -114,6 +121,10 @@ const router = createBrowserRouter([
         path: '/login',
         element: <UserLogIn />
     },
+    {
+        path:'*',
+        element: <PageNotFound />
+    }
 
 ])
 

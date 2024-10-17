@@ -16,7 +16,6 @@ export const fetchClasses = createAsyncThunk("class/getClass", async (schoolId, 
 export const newClass = createAsyncThunk("class/addClass",async(classDetails,{rejectWithValue})=>{
     try{
         const response = await axios.post(`${base_url}/class/add-class/${classDetails.schoolId}`, classDetails)
-        console.log("RESPPP", response)
          return response.data
     }catch(error){
         return rejectWithValue(error.response.data || error.message)

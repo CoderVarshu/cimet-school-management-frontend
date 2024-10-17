@@ -20,6 +20,7 @@ const ListClasses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [classToDelete, setClassToDelete] = useState(null);
+  const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
 
   const dispatch = useDispatch()
   const loading = useSelector(classesLoading)
@@ -75,13 +76,14 @@ const ListClasses = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Classess({classes.length || 0})</h6>
+        {role === 'admin' ? 
         <Link to={`add-class`}>
           <button
             type="button"
             className="bg-black text-white px-4 py-2 rounded">
             + Add New Class
           </button>
-        </Link>
+        </Link> :''}
       </div>
       <div className="overflow-x-auto">
         {loading ? (
@@ -96,7 +98,9 @@ const ListClasses = () => {
                 <th className="py-3 px-4 border-b-2">Name</th>
                 <th className="py-3 px-4 border-b-2">Section</th>
                 <th className="py-3 px-4 border-b-2">Subjects</th>
+                {role === 'admin' ? 
                 <th className="py-3 px-4 border-b-2">Actions</th>
+                :''}
               </tr>
             </thead>
             <tbody>
@@ -110,6 +114,7 @@ const ListClasses = () => {
                 <tr key={i} className="hover:bg-gray-100">
                   <td className="py-3 px-4 border-b"> {data.className}</td>
                   <td className="py-3 px-4 border-b">{data.section}</td>
+                  
                   <td className="py-3 px-4 border-b">
                     {data.subjects.length > 0 ? (
                       data.subjects.map((subject, index) => (
@@ -122,6 +127,7 @@ const ListClasses = () => {
                       <span></span>
                     )}
                   </td>
+                  {role === 'admin' ? 
                   <td className="py-3 px-4 border-b">
                     <button
                       onClick={() => openEditModal(data)}
@@ -135,7 +141,7 @@ const ListClasses = () => {
                     >
                       <AiOutlineDelete />
                     </button>
-                  </td>
+                  </td> :''}
                 </tr>
               ))
               )}

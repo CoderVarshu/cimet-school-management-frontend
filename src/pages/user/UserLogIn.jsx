@@ -43,35 +43,36 @@ const UserLogIn = () => {
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
-
-        console.log("VALUES", values)
-           
         if(role ===  'student'){
-          dispatch(loginUser(values)).then((response)=>{
-            if (response.status) {
+          try{
+            const response = await dispatch(loginUser(values)).unwrap()
+            if(response.status){
               toast.success(response.message);
-              navigate(`/school/${values.schoolId}`);
               resetForm()
-            } else {
-              toast.error(response.message);
-            }
-          }).catch((error)=>{
-             toast.error(error.message)
-          })
+              navigate(`/school/${values.schoolId}/teacher/list-teachers`);
+              // setTimeout(()=>{
 
+              // },100)
+            }
+            else {
+              toast.warning(response.message)
+            }
+          }catch(error){
+            toast.error(error.message)
+          }
         } else if(role === 'teacher'){
-          dispatch(loginTeacher(values)).then((response)=>{
-            if (response.status) {
-              toast.success(response.message);
-              navigate(`/school/${values.schoolId}`);
+          try{
+            const response = await dispatch(loginTeacher(values)).unwrap()
+            if(response.status){
+              toast.success(response?.message);
               resetForm()
-            } else {
-              toast.error(response.message);
+              navigate(`/school/${values.schoolId}/student/list-students`);
+              // setTimeout(()=>{
+              // }, 1000)
             }
-          }).catch((error)=>{
-             toast.error(error.message)
-          })
-
+          }catch(error){
+            toast.error(error.message)
+          }
         } else{
           toast.warning("Role Not Specified")
         }
