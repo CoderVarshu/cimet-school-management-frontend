@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allSchoolData, getSchool } from "../../redux/slices/schoolSlice";
 import { toast } from "react-toastify";
-import { loginUser } from "../../redux/slices/authSlice";
+import { loginTeacher, loginUser } from "../../redux/slices/authSlice";
 
 const UserLogIn = () => {
   const navigate = useNavigate();
@@ -43,9 +43,10 @@ const UserLogIn = () => {
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
+
+        console.log("VALUES", values)
            
         if(role ===  'student'){
-
           dispatch(loginUser(values)).then((response)=>{
             if (response.status) {
               toast.success(response.message);
@@ -59,7 +60,7 @@ const UserLogIn = () => {
           })
 
         } else if(role === 'teacher'){
-          dispatch(loginUser(values)).then((response)=>{
+          dispatch(loginTeacher(values)).then((response)=>{
             if (response.status) {
               toast.success(response.message);
               navigate(`/school/${values.schoolId}`);
@@ -119,7 +120,7 @@ const UserLogIn = () => {
             </label>
             <select
             name="role"
-            value={role} onChange={(e)=> e.target.value}
+            value={role} onChange={(e)=> setRole(e.target.value)}
              className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <option value="" >Select Role</option>
               <option value={'teacher'}>Teacher</option>

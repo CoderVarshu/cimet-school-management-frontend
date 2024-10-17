@@ -7,9 +7,10 @@ import Cookies from 'js-cookie';
 export const loginUser= createAsyncThunk(
     'auth/login',async(values,  { rejectWithValue })=>{
         try{
-         const response = await axios.post(`${base_url}/user/user-login`,values)
+         const response = await axios.post(`${base_url}/student/student-login`,values)
          const token = response.data.token;
-        Cookies.set('userAuthToken', token, { expires: 1 });
+        Cookies.set('token', token, { expires: 1 });
+        localStorage.setItem('userData', JSON.stringify(response.userData))
          return response.data
         }catch(err){
             return rejectWithValue({
@@ -19,6 +20,22 @@ export const loginUser= createAsyncThunk(
         }
     }
 )
+export const loginTeacher= createAsyncThunk(
+  'auth/login',async(values,  { rejectWithValue })=>{
+      try{
+       const response = await axios.post(`${base_url}/teacher/teacher-login`,values)
+       const token = response.data.token;
+      Cookies.set('token', token, { expires: 1 });
+      localStorage.setItem('userData', JSON.stringify(response.userData))
+       return response.data
+      }catch(err){
+          return rejectWithValue({
+              message: err.response?.data?.message || err.message,
+              status: err.response?.status || 500
+            });
+      }
+  }
+)
 
 export const adminLogIn = createAsyncThunk(
     'auth/admin', 
@@ -27,7 +44,8 @@ export const adminLogIn = createAsyncThunk(
         const response = await axios.post(`${base_url}/auth/login`,values);
         console.log("VALUES APII", response)
         const token = response.data.token;
-        Cookies.set('adminAuthToken', token, { expires: 1 });
+        Cookies.set('token', token, { expires: 1 });
+        localStorage.setItem('userData', JSON.stringify(response.data.userData.role))
         return response.data;
       } catch (err) {
         return rejectWithValue({
@@ -51,7 +69,8 @@ const authSlice = createSlice({
     },
     reducers: {
         logoutUser: (state) => {
-            Cookies.remove('adminAuthToken');
+            Cookies.remove('token');
+            localStorage.removeItem('userData')
             state.isAuth = false;
             state.authData = [];
             state.isAdminAuth = false;

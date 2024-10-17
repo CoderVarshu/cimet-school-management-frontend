@@ -6,7 +6,7 @@ import { Navigate} from "react-router-dom";
 import { isAuth } from "../../redux/slices/authSlice";
 
 const PrivateRouteUser = ({ children }) => {
-  const [isAuthenticate, setIsAuthenticate] = useState(false);
+  const [isAuthenticate, setIsAuthenticate] = useState(true);
 
   const authenticate = useSelector(isAuth)
 
