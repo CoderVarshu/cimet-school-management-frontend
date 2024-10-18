@@ -23,16 +23,16 @@ export const getAssignmentBySchool = createAsyncThunk("assignment/getAssignmentB
     try {
 
         const response = await axios.get(
-            `${base_url}/assignment/${schoolId}`
+            `${base_url}/assignment/school/${schoolId}`
 
         );
-        console.log("BY SCHOOL", response.data)
         return response.data;
 
     } catch (error) {
         return rejectWithValue(error.response?.data || error.message);
     }
 })
+
 
 
 export const addAssignment = createAsyncThunk("assignment/newAssignment", async (data, { rejectWithValue }) => {

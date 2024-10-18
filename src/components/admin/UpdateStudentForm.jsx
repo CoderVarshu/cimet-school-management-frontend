@@ -13,7 +13,6 @@ const UpdateStudentForm = ({ setSelectedStudentUpdate, selectedStudentUpdate, cl
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("DETAILS", selectedStudentUpdate)
       const response = await dispatch(editStudent(selectedStudentUpdate)).unwrap();
       if (response.status) {
         toast.success(response.message);

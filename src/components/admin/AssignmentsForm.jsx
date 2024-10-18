@@ -36,7 +36,7 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
   const handleClassChange = (selectedClass) => {
     console.log(selectedClass)
     setAssignmentsDetails({
-      ...getAssignmentsDetails, classId: selectedClass[0]
+      ...getAssignmentsDetails, classId: selectedClass
     })
   }
 
@@ -51,13 +51,14 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
     e.preventDefault();
 
     dispatch(addAssignment(getAssignmentsDetails)).then((res) => {
-      if (res?.payload?.message) {
+      console.log("RESS", res)
+      if (res?.payload?.status) {
         toast.success(res?.payload?.message);
         navigate(-1);
         dispatch(getAssignment())
       }
-      if (res?.payload?.error) {
-        toast.warning(res?.payload?.error)
+      else{
+        toast.warning(res?.payload?.message)
       }
     }).catch((eror) => {
       toast.error(eror?.message)

@@ -11,6 +11,7 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
   const classesData = useSelector(getClassesData)
   const [classes, setClasses] = useState([])
 
+  console.log("SELECTED",selectedClasses )
   
   useEffect(() => {
     if (id) {
@@ -33,6 +34,7 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
       );
       onChange(selectedOptions);
     } else {
+      console.log("",event.target.value)
       onChange(event.target.value);
     }
   };
@@ -43,7 +45,7 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
       <select
         onChange={handleChange}
         multiple={multiple}
-        value={multiple ? selectedClasses : selectedClasses[0] || ""}
+        value={multiple ? selectedClasses : selectedClasses}
         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
         <option value="">Select a class</option>

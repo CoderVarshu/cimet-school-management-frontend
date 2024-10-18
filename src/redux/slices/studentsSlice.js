@@ -28,6 +28,20 @@ export const getStudentsData = createAsyncThunk(
     }
   );
 
+  export const getStudentByClass = createAsyncThunk(
+    "students/getStudentData",
+    async (schoolId, classId) => {
+      try {
+        const response = await axios.get(
+          `${base_url}/student/get-students/${schoolId}/${classId}`
+        );
+        return response.data;
+      } catch (err) {
+        return err;
+      }
+    }
+  );
+
 
   export const editStudent = createAsyncThunk(
     "student/updateStudent",

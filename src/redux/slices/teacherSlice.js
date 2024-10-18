@@ -107,16 +107,6 @@ const teacherSlice = createSlice({
 
     // get perticular class teacher 
 
-    builder.addCase(registerTeacher.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(registerTeacher.fulfilled, (state, action) => {
-      state.loading = false;
-      state.teachersData.push(action.payload);
-    });
-    builder.addCase(registerTeacher.rejected, (state, action) => {
-      (state.loading = false), (state.error = action.error.message);
-    });
   },
 });
 
