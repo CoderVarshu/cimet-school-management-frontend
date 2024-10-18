@@ -26,9 +26,16 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
 
 
   const handleChange = (event) => {
-    const selectedOptions = Array.from(event.target.selectedOptions, option => option.value,)
-    onChange(selectedOptions)
-  }
+    if (multiple) {
+      const selectedOptions = Array.from(
+        event.target.selectedOptions,
+        (option) => option.value
+      );
+      onChange(selectedOptions);
+    } else {
+      onChange(event.target.value);
+    }
+  };
 
   return (
     <>
@@ -36,16 +43,16 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
       <select
         onChange={handleChange}
         multiple={multiple}
-        value={selectedClasses}
+        value={multiple ? selectedClasses : selectedClasses[0] || ""}
         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
         <option value="">Select a class</option>
-        {classes.map((cls, i) => (
-          <>
-            <option key={i} value={cls._id}>
+        {classes.map((cls) => (
+        
+            <option key={cls._id} value={cls._id}>
               {cls.className}  {cls.section}
             </option>
-          </>
+        
         ))}
       </select>
     </>

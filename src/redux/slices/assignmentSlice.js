@@ -7,8 +7,6 @@ import { base_url } from "../../utils/constants";
 
 export const getAssignment = createAsyncThunk("assignment/getAssignment", async (classId, { rejectWithValue }) => {
     try {
-
-        
         const response = await axios.get(
             `${base_url}/assignment/${classId}`
         );
@@ -21,12 +19,14 @@ export const getAssignment = createAsyncThunk("assignment/getAssignment", async 
 
 // get Assignment By School
 
-export const getAssignmentBySchool = createAsyncThunk("assignment/getAssignment", async (schoolId, { rejectWithValue }) => {
+export const getAssignmentBySchool = createAsyncThunk("assignment/getAssignmentBySchool", async (schoolId, { rejectWithValue }) => {
     try {
 
         const response = await axios.get(
-            `${base_url}/assignment/get-assignment/${schoolId}`
+            `${base_url}/assignment/${schoolId}`
+
         );
+        console.log("BY SCHOOL", response.data)
         return response.data;
 
     } catch (error) {
@@ -84,6 +84,19 @@ const assignmentSlice = createSlice({
                 state.assignmentsData = action.payload
         })
         builder.addCase(getAssignment.rejected, (state, action) => {
+            state.loading = false,
+                state.error = action.error.message
+        })
+
+        builder.addCase(getAssignmentBySchool.pending, (state) => {
+            state.loading = true
+        })
+
+        builder.addCase(getAssignmentBySchool.fulfilled, (state, action) => {
+            state.loading = false,
+                state.assignmentsData = action.payload
+        })
+        builder.addCase(getAssignmentBySchool.rejected, (state, action) => {
             state.loading = false,
                 state.error = action.error.message
         })

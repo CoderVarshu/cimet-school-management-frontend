@@ -39,8 +39,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
       </label>
       { multiple ? 
       <div className="flex flex-wrap mb-4">
-        {selectedSubject.length && selectedSubject?.map((subjectId) => {
-          console.log("SSS", subjectId)
+        {selectedSubject.length > 0 && selectedSubject?.map((subjectId) => {
           const subject = subjects.find((cls) => cls._id === subjectId);
           return (
             subject && (

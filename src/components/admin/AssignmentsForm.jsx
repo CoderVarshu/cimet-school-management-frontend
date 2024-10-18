@@ -11,15 +11,18 @@ const AssignmentsForm = () => {
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const getProfileData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) :null
+const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+ const {id} = useParams()
 
-const teacherId =getProfileData?._id
-  const [showPassword, setShowPassword] = useState(false);
+const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
+
   const [getAssignmentsDetails, setAssignmentsDetails] = useState({
     title: "",
     description: "",
     subjectId: "",
     classId: "",
     teacherId,
+    schoolId: id,
   });
 
   const handleInputChange = (e) => {
@@ -42,10 +45,6 @@ const teacherId =getProfileData?._id
       ...getAssignmentsDetails, subjectId: selectedSubject[0]
     })
   }
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleSubmit = async (e) => {
 

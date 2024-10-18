@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../redux/slices/authSlice";
 import Cookies from "js-cookie";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -64,7 +64,7 @@ const Header = () => {
   return (
     <header className="bg-black text-white p-4 flex justify-between items-center">
       <h2 className="font-bold">
-        {role === 'admin' ? "Admin Dashboard " :
+        {role === 'admin' ? <Link to='/admin-dashboard'> Admin Dashboard </Link> :
           <> {data ? `Hello ${data?.firstname}, Welcome In ${data?.schoolId?.name}` : ""}</>}
 
         {(role === 'admin' && schoolData) ? `/ ${schoolData?.name}` : ""}

@@ -50,9 +50,7 @@ const UserLogIn = () => {
               toast.success(response.message);
               resetForm()
               navigate(`/school/${values.schoolId}/teacher/list-teachers`);
-              // setTimeout(()=>{
-
-              // },100)
+          
             }
             else {
               toast.warning(response.message)

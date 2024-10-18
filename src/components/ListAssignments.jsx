@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { assignmentsData, assignmentsLoading, deleteAssignment, getAssignment } from "../redux/slices/assignmentSlice";
+import { assignmentsData, assignmentsLoading, deleteAssignment, getAssignment, getAssignmentBySchool } from "../redux/slices/assignmentSlice";
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UpdateAssignments from "./user/UpdateAssignments";
@@ -8,6 +8,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaRegEye } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const ListAssignments = () => {
 
@@ -15,7 +16,6 @@ const ListAssignments = () => {
   const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
   const classId = userData?.class?._id
   const {id} = useParams()
-  console.log("USERRR", userData)
  
   const [assignments, setAssignments] = useState([]);
   const [selectedAssignmentUpdate, setSelectedAssignmentUpdate] = useState(null);
@@ -27,12 +27,15 @@ const ListAssignments = () => {
   const data = useSelector(assignmentsData)
   const loading = useSelector(assignmentsLoading)
 
+  console.log('asss',role,id, classId)
   useEffect(()=>{
-    dispatch(getAssignment(classId))
-    if(classId){
-   
+    if( role === 'admin' && id){
+      dispatch(getAssignmentBySchool(id)) 
     }
-  }, [classId])
+    else if ((role === "teacher" || role === "student") && classId) {
+      dispatch(getAssignment(classId));
+    }
+  }, [classId, id, role])
 
 useEffect(()=>{
   if(data){

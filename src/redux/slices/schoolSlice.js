@@ -17,6 +17,9 @@ export const registerSchool = createAsyncThunk(
   }
 );
 
+
+
+
 export const getSchool= createAsyncThunk(
     "school/getSchool", async()=>{
         try{
@@ -28,15 +31,32 @@ export const getSchool= createAsyncThunk(
     }
 )
 
+// get school By Id
+
+export const getSchoolById = createAsyncThunk(
+  "school/getById", async(id)=>{
+    try{
+
+      const response = await axios.get(`${base_url}/api/schools/${id}`)
+      return response.data
+
+    }catch(error){
+      return error.message
+    }
+  }
+)
+
+// update school
+
 export const editSchool = createAsyncThunk(
     "school/updateSchool",
     async (schoolDetails, { rejectWithValue }) => {
       try {
         const response = await axios.put(
-          `${base_url}/api/update-school/${schoolDetails._id}`,  // Assuming you're passing the school ID in `schoolDetails`
+          `${base_url}/api/update-school/${schoolDetails._id}`, 
           schoolDetails
         );
-        return response.data;  // Returning the updated school data
+        return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
       }
@@ -47,10 +67,10 @@ export const editSchool = createAsyncThunk(
     "school/deleteSchool",
     async (schoolId, { rejectWithValue }) => {
       try {
-        const response = await axios.delete(`${base_url}/api/delete-school/${schoolId}`); // Assuming you're passing the school ID as a parameter
-        return response.data; // Return the response data if needed (e.g., success message)
+        const response = await axios.delete(`${base_url}/api/delete-school/${schoolId}`); 
+        return response.data;
       } catch (err) {
-        return rejectWithValue(err.response?.data || err.message); // Handle errors gracefully
+        return rejectWithValue(err.response?.data || err.message); 
       }
     }
   );
@@ -73,7 +93,7 @@ const schoolSlice = createSlice({
     });
     builder.addCase(registerSchool.fulfilled, (state, action) => {
       state.loading = false;
-      state.schoolData.push(action.payload);
+      state.schoolData =[...state.schoolData, action.payload];
     });
     builder.addCase(registerSchool.rejected, (state, action) => {
       (state.loading = false), 
@@ -94,34 +114,17 @@ const schoolSlice = createSlice({
         state.error = action.error.message
     })
 
-    // to edit perticular school
 
-    builder.addCase(editSchool.pending, (state)=>{
-        state.loading = true
-    })
+    // get single school data
 
-    builder.addCase(editSchool.fulfilled, (state, action)=>{
-        state.loading = false
-        const index = state.schoolData.findIndex(school => school._id === action.payload._id);
-        if (index !== -1) {
-            state.schoolData[index] = action.payload; 
-        }
-    })
-    builder.addCase(editSchool.rejected, (state, action)=>{
-        state.loading = false
-        state.error =  action.error.message
-    })
-
-    // to delete school
-
-    .addCase(deleteSchool.pending, (state) => {
+    .addCase(getSchoolById.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteSchool.fulfilled, (state, action) => {
+      .addCase(getSchoolById.fulfilled, (state, action) => {
         state.loading = false;
-        state.schoolData = state.schoolData.filter(school => school._id !== action.payload._id);
+        state.singleSchoolData = action.payload;
       })
-      .addCase(deleteSchool.rejected, (state, action) => {
+      .addCase(getSchoolById.rejected, (state, action) => {
         state.loading = false; 
         state.error = action.error.message;
       });
@@ -137,8 +140,8 @@ export const schoolLoading =(state)=>{
     return state.school?.loading
 }
 
-export const selectSchoolById = (state, id) => {
-  return state?.school?.schoolData?.find((school) => school?._id === id) || null; // Adjust the key if needed
+export const selectSchoolById = (state) => {
+  return state?.school?.singleSchoolData;
 };
 
 export default schoolSlice.reducer

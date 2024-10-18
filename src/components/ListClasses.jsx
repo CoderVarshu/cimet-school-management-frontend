@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import ConfirmationModal from "./ConfirmationModal"
 import UpdateClassForm from "./admin/UpdateClassForm"
-import { selectSchoolById } from "../redux/slices/schoolSlice"
 import { useEffect, useState } from "react"
 import { classesLoading, deleteClass, fetchClasses, getClassesData } from "../redux/slices/classSlice"
 import { Link, useParams } from "react-router-dom"
@@ -13,8 +12,6 @@ import { AiOutlineDelete } from "react-icons/ai"
 const ListClasses = () => {
 
   const { id } = useParams()
-  const schoolById = useSelector((state) => selectSchoolById(state, id));
-
   const [classes, setClasses] = useState([]);
   const [selectedClassUpdate, setSelectedClassUpdate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,10 +24,10 @@ const ListClasses = () => {
   const classesData = useSelector(getClassesData)
 
   useEffect(() => {
-    if (schoolById) {
-      dispatch(fetchClasses(schoolById._id))
+    if (id) {
+      dispatch(fetchClasses(id))
     }
-  }, [schoolById])
+  }, [id])
 
   useEffect(() => {
     setClasses(classesData)
@@ -62,7 +59,7 @@ const ListClasses = () => {
       const response = await dispatch(deleteClass(classToDelete)).unwrap();
       if (response.status) {
         toast.success("Deleted SuccessFully");
-        dispatch(fetchClasses(schoolById?._id));
+        dispatch(fetchClasses(id));
         closeConfirmation();
       }
     } catch (err) {

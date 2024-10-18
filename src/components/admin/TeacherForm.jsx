@@ -87,7 +87,6 @@ const TeacherForm = () => {
                 value={getUserDetails.lastname}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>

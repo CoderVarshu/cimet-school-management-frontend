@@ -2,12 +2,12 @@
 
 import SideNavButton from "../SideNavButton";
 
-const SideNavForStd = ({ setSelectedComponent, selectedComponent }) => {
+const SideNavForStd = () => {
 
   const data = [
     { name: "Teachers", path: "teacher/list-teachers" },
     { name: "Subjects", path: "subjects/list-subjects" },
-    { name: "Classes", path: "classes/list-classes" },
+    // { name: "Classes", path: "classes/list-classes" },
     { name: "Assignments", path: "assignments/list-assignments" },
     { name : "Profile", path:'profile' }
   ];
