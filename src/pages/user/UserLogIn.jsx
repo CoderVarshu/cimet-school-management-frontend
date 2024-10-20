@@ -178,9 +178,9 @@ const UserLogIn = () => {
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
-          <div className="flex justify-center cursor-pointer" onClick={()=>navigate('/adminlogin')}>
+          {/* <div className="flex justify-center cursor-pointer" onClick={()=>navigate('/adminlogin')}>
             Admin Login
-          </div>
+          </div> */}
         </form>
       )}
     </Formik>
