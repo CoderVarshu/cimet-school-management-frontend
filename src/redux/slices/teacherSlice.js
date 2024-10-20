@@ -22,15 +22,15 @@ export const getTeachersData = createAsyncThunk(
 // get teachers for perticular class 
 
 export const getClassTeachersData = createAsyncThunk(
-  "teacher/getTeachersData",
-  async (schoolId, classId) => {
+  "teacher/getTeachersByClassData",
+  async (schoolId, classId,{rejectWithValue}) => {
     try {
       const response = await axios.get(
         `${base_url}/teacher/${schoolId}/${classId}`
       );
       return response.data;
     } catch (err) {
-      return err;
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch students data");
     }
   }
 );
@@ -106,6 +106,19 @@ const teacherSlice = createSlice({
     
 
     // get perticular class teacher 
+
+    builder.addCase(getClassTeachersData.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getClassTeachersData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.teachersData = action.payload;
+    });
+    
+    builder.addCase(getClassTeachersData.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
 
   },
 });

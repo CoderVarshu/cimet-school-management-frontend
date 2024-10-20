@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteTeacher, getClassTeachersData, getTeachersData, teachersData, teachersLoading } from "../redux/slices/teacherSlice"
+import { deleteTeacher,
+  //  getClassTeachersData,
+    getTeachersData, teachersData, teachersLoading } from "../redux/slices/teacherSlice"
 import { AiOutlineDelete } from "react-icons/ai"
 import { BiSolidEdit } from "react-icons/bi"
 import ConfirmationModal from "./ConfirmationModal"
@@ -12,8 +14,8 @@ import { toast} from "react-toastify"
 const ListTeachers = () => {
 
   const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
-  const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
-  const classId = userData?.class?._id
+  // const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
+  // const classId = userData?.class?._id
 
   const {id} = useParams()
  
@@ -27,20 +29,20 @@ const ListTeachers = () => {
   const data = useSelector(teachersData)
   const loading = useSelector(teachersLoading)
 
-  // useEffect(()=>{
-  //   if(id){
-  //  dispatch(getTeachersData(id))
-  //   }
-  // }, [id])
+  useEffect(()=>{
+    if(id){
+   dispatch(getTeachersData(id))
+    }
+  }, [id])
 
-  useEffect(() => {
-    if (role === 'admin' && id) {
-      dispatch(getTeachersData(id))
-    }
-    else if ((role === "teacher" || role === "student") && classId) {
-      dispatch(getClassTeachersData(id))
-    }
-  }, [classId, id, role])
+  // useEffect(() => {
+  //   if (role === 'admin' && id) {
+  //     dispatch(getTeachersData(id))
+  //   }
+  //   if ((role === "teacher" || role === "student") && classId) {
+  //     dispatch(getClassTeachersData(id))
+  //   }
+  // }, [classId, id, role])
 
 useEffect(()=>{
   if(data){

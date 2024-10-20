@@ -1,15 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { base_url } from "../../utils/constants";
-
+import Cookies from 'js-cookie';
 
 
 export const registerSchool = createAsyncThunk(
   "school/addSchool",
   async (info, {rejectWithValue}) => {
     try {
+      const token = Cookies.get('token'); 
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      };
         const response = await axios.post(
-          `${base_url}/api/add-school`, info);
+          `${base_url}/api/add-school`, info, config);
+          console.log("RES", response)
         return response.data;
       } catch (error) {
         return rejectWithValue(error.response?.data || error.message);

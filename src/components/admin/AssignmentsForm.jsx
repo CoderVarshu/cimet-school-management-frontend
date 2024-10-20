@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,7 +12,7 @@ const AssignmentsForm = () => {
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const getProfileData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) :null
-const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+// const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
  const {id} = useParams()
 
 const [teacherId, setTeacherId] = useState(getProfileData?._id || null)

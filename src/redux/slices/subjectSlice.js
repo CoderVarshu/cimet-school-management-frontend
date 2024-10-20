@@ -18,6 +18,7 @@ export const addSubject = createAsyncThunk("subject/add-subject", async (subject
     try {
         console.log("SubjectData", subjectData)
         const response = await axios.post(`${base_url}/subject/add-subject`,subjectData)
+        console.log("RESPONSE", response)
         return response.data
 
     } catch (error) {

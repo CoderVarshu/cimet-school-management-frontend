@@ -19,7 +19,9 @@ const UserLogIn = () => {
   }, []);
 
   useEffect(() => {
-    setSchoolDetails(schoolsData);
+    if(schoolsData){
+      setSchoolDetails(schoolsData);
+    }
   }, [schoolsData]);
 
   return (
@@ -101,8 +103,8 @@ const UserLogIn = () => {
             value={values.schoolId} onChange={handleChange}
              className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <option value="" >Select School</option>
-              {schoolDetails &&
-                schoolDetails.map((item) => (
+              {schoolDetails.length > 0 &&
+                schoolDetails?.map((item) => (
                   <option
                     key={item._id}
                     value={item._id}

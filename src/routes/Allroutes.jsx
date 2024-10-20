@@ -15,7 +15,7 @@ import ListSubject from "../components/ListSubject";
 import SubjectForm from "../components/admin/SubjectForm";
 import ListAssignments from "../components/ListAssignments";
 import AssignmentsForm from "../components/admin/AssignmentsForm";
-import { LandingPage } from "../pages/LandingPage";
+// import { LandingPage } from "../pages/LandingPage";
 import Profile from "../pages/Profile";
 import PrivateRouteUser from "../pages/user/PrivateRouteUser";
 import PageNotFound from "../pages/PageNotFound";
@@ -23,7 +23,7 @@ import PageNotFound from "../pages/PageNotFound";
 const router = createBrowserRouter([
     {
         path:'/',
-        element:<LandingPage />
+        element:<UserLogIn />
     },
     {
         path: '/admin-dashboard',

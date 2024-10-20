@@ -5,9 +5,7 @@ import { useEffect, useState } from "react";
 import UpdateAssignments from "./user/UpdateAssignments";
 import Modal from "./Modal";
 import ConfirmationModal from "./ConfirmationModal";
-import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { FaRegEye } from "react-icons/fa";
 import { toast } from "react-toastify";
 import AssignmentSubmissionForm from "./user/AssignmentSubmissionForm";
 import ListSubmission from "./admin/ListSubmission";
@@ -31,12 +29,19 @@ const ListAssignments = () => {
   const data = useSelector(assignmentsData)
   const loading = useSelector(assignmentsLoading)
 
+  // useEffect(()=>{
+  //   if(id){
+  //     dispatch(getAssignmentBySchool(id))
+  //   }
+  // }, [id])
+
   useEffect(() => {
-    if (role === 'admin' && id) {
+    if ((role === 'admin' || role === "teacher"  )  && id) {
       dispatch(getAssignmentBySchool(id))
     }
-    else if ((role === "teacher" || role === "student") && classId) {
+    else if ( role === "student" && classId) {
       dispatch(getAssignment(classId));
+      
     }
   }, [classId, id, role])
 
@@ -47,10 +52,10 @@ const ListAssignments = () => {
   }, [data])
 
 
-  const openEditModal = (data) => {
-    setSelectedAssignmentUpdate(data);
-    setIsModalOpen(true);
-  };
+  // const openEditModal = (data) => {
+  //   setSelectedAssignmentUpdate(data);
+  //   setIsModalOpen(true);
+  // };
 
   const closeSubmissionModal = () => {
     setSubmissionModal(false)

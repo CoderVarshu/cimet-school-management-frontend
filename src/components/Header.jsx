@@ -7,21 +7,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../redux/slices/authSlice";
 import Cookies from "js-cookie";
 import { FaRegUserCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [schoolName, setSchoolName] = useState('')
 
   const token = Cookies.get('token')
   const data = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
   const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
   const schoolData = localStorage.getItem('school_id') ? JSON.parse(localStorage.getItem('school_id')) : null
 
+  console.log("DATA", schoolData)
   useEffect(() => {
     if (token) {
       setIsAuthenticated(true)
     }
   }, [token])
+
+  useEffect(()=>{
+    if(schoolData){
+      setSchoolName(schoolData?.name)
+    }
+  }, [schoolData])
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,6 +40,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logoutUser());
     setShowModal(false);
+    toast.success("Log out Successfully")
     navigate("/login");
   };
 
@@ -49,7 +59,7 @@ const Header = () => {
         setShowModal(false);
       }
     };
-
+    
     if (showModal) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -67,7 +77,7 @@ const Header = () => {
         {role === 'admin' ? <Link to='/admin-dashboard'> Admin Dashboard </Link> :
           <> {data ? `Hello ${data?.firstname}, Welcome In ${data?.schoolId?.name}` : ""}</>}
 
-        {(role === 'admin' && schoolData) ? `/ ${schoolData?.name}` : ""}
+        {(role === 'admin' && schoolData) ? `/ ${schoolName}` : ""}
       </h2>
 
       <h2 className="font-bold text-xl" >School Management System</h2>

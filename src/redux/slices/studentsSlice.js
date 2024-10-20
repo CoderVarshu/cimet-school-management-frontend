@@ -16,28 +16,29 @@ export const registerStudent = createAsyncThunk(
 
 export const getStudentsData = createAsyncThunk(
     "students/getStudentData",
-    async (schoolId) => {
+    async (schoolId,{ rejectWithValue }) => {
       try {
         const response = await axios.get(
           `${base_url}/student/get-students?schoolId=${schoolId}`
         );
         return response.data;
       } catch (err) {
-        return err;
+        return rejectWithValue(err.response?.data?.message || "Failed to fetch students data");
       }
     }
   );
 
   export const getStudentByClass = createAsyncThunk(
-    "students/getStudentData",
-    async (schoolId, classId) => {
+    "students/getStudentByData",
+    async (schoolId, classId,{ rejectWithValue }) => {
       try {
         const response = await axios.get(
-          `${base_url}/student/get-students/${schoolId}/${classId}`
+          `${base_url}/student/class/${schoolId}/${classId}`
         );
+        console.log("STD API", response)
         return response.data;
       } catch (err) {
-        return err;
+        return rejectWithValue(err.response?.data?.message || "Failed to fetch students data");
       }
     }
   );
@@ -91,16 +92,16 @@ const studentsSlice = createSlice({
         (state.loading = false), (state.error = action.error.message);
       });
 
-    // builder.addCase(registerStudent.pending, (state) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(registerStudent.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.studentsData = [...state.studentsData, action.payload];
-    // });
-    // builder.addCase(registerStudent.rejected, (state, action) => {
-    //   (state.loading = false), (state.error = action.error.message);
-    // });
+    builder.addCase(getStudentByClass.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getStudentByClass.fulfilled, (state, action) => {
+      state.loading = false;
+      state.studentsData = action.payload
+    });
+    builder.addCase(getStudentByClass.rejected, (state, action) => {
+      (state.loading = false), (state.error = action.payload);
+    });
   },
 });
 

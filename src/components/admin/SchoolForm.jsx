@@ -31,12 +31,12 @@ const SchoolForm = () => {
      if(response.status){
         toast.success(response.message)
         setTimeout(() => {
-          navigate('/');
+          navigate('/admin-dashboard');
         }, 1000);
      }
   
     } catch (error) {
-        toast.error(error.error || "Something went wrong. Please try again.")
+        toast.error(error.message || "Something went wrong. Please try again.")
       console.error('Error222:', error);
     }
   };

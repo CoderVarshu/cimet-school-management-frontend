@@ -3,7 +3,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteStudent,
-  getStudentByClass,
+  // getStudentByClass,
   getStudentsData,
   studenstLoading,
   studentsData,
@@ -35,16 +35,17 @@ const ListStudents = () => {
 
     if (id) dispatch(getStudentsData(id));
   }, [id]);
+  
+  console.log("Role", role, classId)
 
-
-  useEffect(() => {
-    if (role === 'admin' && id) {
-      dispatch(getStudentsData(id));
-    }
-    else if ((role === "teacher" || role === "student") && classId) {
-      dispatch(getStudentByClass(id))
-    }
-  }, [classId, id, role])
+  // useEffect(() => {
+  //   if (role === 'admin' && id) {
+  //     dispatch(getStudentsData(id));
+  //   }
+  //  if ((role === "teacher" || role === "student") && classId) {
+  //     dispatch(getStudentByClass(id, classId))
+  //   }
+  // }, [classId, id, role])
 
   useEffect(() => {
     setStudents(data.data);

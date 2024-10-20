@@ -45,7 +45,7 @@ export const adminLogIn = createAsyncThunk(
       try {
         const response = await axios.post(`${base_url}/auth/login`,values);
         const token = response.data.token;
-        Cookies.set('token', token, { expires: 1 });
+        Cookies.set('token', token, { expires: 1, secure: true, sameSite: 'Strict' });
         localStorage.setItem('role', JSON.stringify(response.data.userData.role))
         return response.data;
       } catch (err) {
