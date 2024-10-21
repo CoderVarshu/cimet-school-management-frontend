@@ -91,6 +91,14 @@ const schoolSlice = createSlice({
     selectedSchool: null,
     singleSchoolData: null,
   },
+
+  reducers: {
+
+    removeSChool:(state)=>{
+      state.singleSchoolData = null
+    }
+
+  },
   extraReducers: (builder) => {
 
     // to add school 
@@ -138,6 +146,7 @@ const schoolSlice = createSlice({
   },
 });
 
+export const {removeSChool} = schoolSlice.actions
 
 export const allSchoolData =(state)=>{
     return state.school?.schoolData

@@ -3,23 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { logoutUser } from "../redux/slices/authSlice";
 import Cookies from "js-cookie";
 import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { getSchoolById, selectSchoolById } from "../redux/slices/schoolSlice";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [schoolName, setSchoolName] = useState('')
+  const {id} = useParams();
+  const schoolById = useSelector(selectSchoolById)
 
   const token = Cookies.get('token')
   const data = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
   const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
-  const schoolData = localStorage.getItem('school_id') ? JSON.parse(localStorage.getItem('school_id')) : null
 
-  console.log("DATA", schoolData)
   useEffect(() => {
     if (token) {
       setIsAuthenticated(true)
@@ -27,10 +28,19 @@ const Header = () => {
   }, [token])
 
   useEffect(()=>{
-    if(schoolData){
-      setSchoolName(schoolData?.name)
+    if(schoolById){
+      setSchoolName(schoolById?.name)
+      
     }
-  }, [schoolData])
+  }, [schoolById])
+
+  useEffect(()=>{
+    if(id){
+      dispatch(getSchoolById(id))
+    }
+  }, [id])
+
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,7 +87,7 @@ const Header = () => {
         {role === 'admin' ? <Link to='/admin-dashboard'> Admin Dashboard </Link> :
           <> {data ? `Hello ${data?.firstname}, Welcome In ${data?.schoolId?.name}` : ""}</>}
 
-        {(role === 'admin' && schoolData) ? `/ ${schoolName}` : ""}
+        {(role === 'admin' && schoolById) ? `/ ${schoolName}` : ""}
       </h2>
 
       <h2 className="font-bold text-xl" >School Management System</h2>

@@ -10,6 +10,7 @@ import {
   allSchoolData,
   deleteSchool,
   getSchool,
+  removeSChool,
   schoolLoading,
 } from "../../redux/slices/schoolSlice.js";
 import { toast } from "react-toastify";
@@ -26,16 +27,13 @@ export const ListSchool = () => {
   const loading = useSelector(schoolLoading);
 
   useEffect(() => {
-    localStorage.removeItem('school_id')
-  }, [])
-
-  useEffect(() => {
     setSchools(schoolsData);
   }, [schoolsData, loading]);
 
 
   useEffect(() => {
     dispatch(getSchool());
+    dispatch(removeSChool())
   }, []);
 
   const openEditModal = (owner) => {
