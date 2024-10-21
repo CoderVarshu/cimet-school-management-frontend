@@ -120,7 +120,7 @@ const ListSubmission = ({ selectedAssignment, closeSubmissionModal }) => {
             <Modal isOpen={isConfirmationOpen} onClose={closeConfirmation}>
                 <div className="flex justify-center items-center mt-24">
                     <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
-                        <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
+                        <h2 className="text-lg font-bold mb-4">Confirm Marking</h2>
                         <p>Are you sure you want to Mark Checked?</p>
                         <div className="mt-4 flex justify-end">
                             <button
