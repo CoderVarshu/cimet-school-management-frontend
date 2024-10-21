@@ -101,13 +101,14 @@ const ListAssignments = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Assignments({assignments?.length || 0})</h6>
+        { (role === 'teacher' || role === 'admin') ?
         <Link to={`add-assignment`}>
           <button
             type="button"
             className="bg-black text-white px-4 py-2 rounded">
             + Add Assignment
           </button>
-        </Link>
+        </Link> :''}
       </div>
 
       <div className="overflow-x-auto">

@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerSchool } from "../../redux/slices/schoolSlice";
 import { toast } from "react-toastify";
+import Header from "../Header";
+import Footer from "../Footer";
 
 const SchoolForm = () => {
     const dispatch = useDispatch()
@@ -42,7 +44,9 @@ const SchoolForm = () => {
   };
 
   return (
-    <div className="flex justify-center m-5 items-center min-h-screen ">
+    <>
+    <Header />
+    <div className="flex justify-center m-5 items-center min-h-[75vh] ">
       <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
       
         <h2 className="text-2xl font-bold mb-6 text-center">
@@ -131,6 +135,8 @@ const SchoolForm = () => {
         </form>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

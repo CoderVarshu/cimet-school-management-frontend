@@ -30,7 +30,8 @@ const AssignmentSubmissionForm = ({type,selectedAssignment,closeSubmissionModal}
                 closeSubmissionModal()
             }
             else {
-                toast.warning(response.message)
+                toast.warning(response?.payload?.message)
+                closeSubmissionModal()
             }
         }).catch((error) => {
             toast.error(error.message)
