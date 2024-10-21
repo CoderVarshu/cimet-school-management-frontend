@@ -19,6 +19,7 @@ import AssignmentsForm from "../components/admin/AssignmentsForm";
 import Profile from "../pages/Profile";
 import PrivateRouteUser from "../pages/user/PrivateRouteUser";
 import PageNotFound from "../pages/PageNotFound";
+import PrivateRouteTeacher from "../pages/user/PrivateRouteTeacher";
 
 const router = createBrowserRouter([
     {
@@ -103,7 +104,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path:'add-assignment',
-                        element:<PrivateRouteUser> <AssignmentsForm /> </PrivateRouteUser>
+                        element:<PrivateRouteTeacher> <AssignmentsForm /> </PrivateRouteTeacher>
                     }
                 ]
             },
