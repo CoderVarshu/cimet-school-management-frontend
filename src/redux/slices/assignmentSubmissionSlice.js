@@ -29,7 +29,7 @@ export const getSubmissionByAssignmentId =createAsyncThunk("submission/getSubmis
 
 // perticular student Submission
 
-export const getSubmissionByStudentId =createAsyncThunk("submission/getSubmissionByStudentId", async(studentId,assignmentId,{rejectWithValue})=>{
+export const getSubmissionByStudentId =createAsyncThunk("submission/getSubmissionByStudentId", async({studentId,assignmentId},{rejectWithValue})=>{
     try{
         const response = await axios.get(`${base_url}/submission/assignment/student/${studentId}/${assignmentId}`)
         return response.data
@@ -80,6 +80,10 @@ const submissionSlice = createSlice({
             state.loading = false,
             state.submissionByStudent = action.payload
             state.submissionDataById = action.payload
+        })
+        builder.addCase(getSubmissionByStudentId.rejected,(state, action)=>{
+            state.loading = false,
+            state.error = action.error.message
         })
     }
 

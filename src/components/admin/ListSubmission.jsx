@@ -1,19 +1,19 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getSubmissionByAssignmentId, submissiondata, submissionLoading, updateSubmission } from "../../redux/slices/assignmentSubmissionSlice"
-import { BiSolidEdit } from "react-icons/bi"
-import { AiOutlineDelete } from "react-icons/ai"
+// import { BiSolidEdit } from "react-icons/bi"
+// import { AiOutlineDelete } from "react-icons/ai"
 import Modal from "../Modal"
 import { toast } from "react-toastify"
 
-const ListSubmission = ({ selectedAssignment, closeSubmissionModal }) => {
+const ListSubmission = ({ selectedAssignment }) => {
 
     const [submissionData, setSubmissionData] = useState([])
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
     const [submissionToEdit, setSubmissionToEdit] = useState('')
 
     const dispatch = useDispatch()
-    console.log("selected", selectedAssignment)
     useEffect(() => {
         if (selectedAssignment?._id) {
             dispatch(getSubmissionByAssignmentId(selectedAssignment?._id))
@@ -103,11 +103,11 @@ const ListSubmission = ({ selectedAssignment, closeSubmissionModal }) => {
                                         <button
                                             disabled={data.checked}
                                             onClick={() => openConfirmation(data?._id)}
-                                            className={`text-slate-900 hover:underline 
-                                             ${data.checked ? 'opacity-50 text-red-500 cursor-not-allowed' : 'text-green-500 hover:text-green-500'}`}
+                                            className={` hover:underline 
+                                             ${data.checked ? 'opacity-50 text-red-500 cursor-not-allowed' : 'text-green-500'}`}
                                             type="button"
                                         >
-                                            {!data.checked ? "Pending" : "Checked"}
+                                            {!data.checked ? "Pending" : "✓ Checked"}
                                         </button>
                                     </td>
                                 </tr>
