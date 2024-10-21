@@ -40,6 +40,10 @@ const AssignmentSubmissionForm = ({
       setType("Update");
       setTask(selectionSubmission[0]?.task);
     }
+    else {
+      setTask('')
+      setType('Create')
+    }
   }, [selectionSubmission]);
 
   console.log("SELECTION", selectionSubmission[0]);
