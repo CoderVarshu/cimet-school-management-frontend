@@ -8,7 +8,9 @@ const Wrapper = () => {
   return (
     <>
     <Header/>
+    <div className="min-h-[70vh]">
     <ListSchool />
+    </div>
     <Footer />
     </>
   )
