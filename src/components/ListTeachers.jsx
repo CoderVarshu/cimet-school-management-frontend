@@ -10,6 +10,8 @@ import { Link, useParams } from "react-router-dom"
 import Modal from "./Modal"
 import UpdateTeachersForm from "./admin/UpdateTeachersForm"
 import { toast} from "react-toastify"
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const ListTeachers = () => {
 
@@ -100,10 +102,14 @@ useEffect(()=>{
 
     <div className="overflow-x-auto">
       {loading ? ( 
-        <div className="flex justify-center items-center py-10">
-          <span className="loader"></span>{" "}
-          <p className="ml-2">Loading Teachers Data ...</p>
-        </div>
+        <div className="py-10">
+        <Skeleton count={5} height={30} className="mb-2" />
+      </div>
+
+        // <div className="flex justify-center items-center py-10">
+        //   <span className="loader"></span>{" "}
+        //   <p className="ml-2">Loading Teachers Data ...</p>
+        // </div>
       ) : (
         <table className="min-w-full bg-white border">
           <thead>

@@ -13,6 +13,8 @@ import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmationModal from "./ConfirmationModal";
 import Modal from "./Modal";
 import SubjectForm from "./admin/SubjectForm";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const ListSubject = () => {
   const { id } = useParams();
@@ -75,33 +77,36 @@ const ListSubject = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h6 className="text-xl font-bold">All Subjects({subjects?.length})</h6>
-        {role === 'admin' ? 
-        <Link to={`add-subject`}>
-          <button
-            type="button"
-            className="bg-black text-white px-4 py-2 rounded"
-          >
-            + Add Subject
-          </button>
-        </Link> :''}
+        {role === 'admin' ?
+          <Link to={`add-subject`}>
+            <button
+              type="button"
+              className="bg-black text-white px-4 py-2 rounded"
+            >
+              + Add Subject
+            </button>
+          </Link> : ''}
       </div>
 
 
       <div className="overflow-x-auto">
-        {loading ? ( 
+        {loading ? (
 
-          <div className="flex justify-center items-center py-10">
-            <span className="loader"></span>{" "}
-            <p className="ml-2">Loading Subjects Data ...</p>
+          <div className="py-10">
+            <Skeleton count={5} height={30} className="mb-2" />
           </div>
+          // <div className="flex justify-center items-center py-10">
+          //   <span className="loader"></span>{" "}
+          //   <p className="ml-2">Loading Subjects Data ...</p>
+          // </div>
         ) : (
           <table className="min-w-full bg-white border">
             <thead>
               <tr className="bg-gray-100 text-left">
                 <th className="py-3 px-4 border-b-2">Name</th>
-                {role === 'admin' ? 
-                <th className="py-3 px-4 border-b-2">Actions</th>
-                :''}
+                {role === 'admin' ?
+                  <th className="py-3 px-4 border-b-2">Actions</th>
+                  : ''}
               </tr>
             </thead>
             <tbody>
@@ -118,21 +123,21 @@ const ListSubject = () => {
                       {" "}
                       {data.subjectName}
                     </td>
-                    {role === 'admin' ? 
-                    <td className="py-3 px-4 border-b">
-                      <button
-                        onClick={() => openEditModal(data)}
-                        className="text-blue-500 hover:underline mr-4"
-                      >
-                        <BiSolidEdit />
-                      </button>
-                      <button
-                        onClick={() => openConfirmation(data._id)}
-                        className="text-red-500 hover:underline"
-                      >
-                        <AiOutlineDelete />
-                      </button>
-                    </td> :''}
+                    {role === 'admin' ?
+                      <td className="py-3 px-4 border-b">
+                        <button
+                          onClick={() => openEditModal(data)}
+                          className="text-blue-500 hover:underline mr-4"
+                        >
+                          <BiSolidEdit />
+                        </button>
+                        <button
+                          onClick={() => openConfirmation(data._id)}
+                          className="text-red-500 hover:underline"
+                        >
+                          <AiOutlineDelete />
+                        </button>
+                      </td> : ''}
                   </tr>
                 ))
               )}
@@ -143,7 +148,7 @@ const ListSubject = () => {
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <SubjectForm
-          type={"Update"}
+            type={"Update"}
             selectedSubjectUpdate={selectedSubjectUpdate}
             setSelectedSubjectUpdate={setSelectedSubjectUpdate}
             closeModal={closeModal}

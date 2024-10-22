@@ -14,6 +14,8 @@ import Modal from "./Modal";
 import { toast } from "react-toastify";
 import UpdateStudentForm from "./admin/UpdateStudentForm";
 import ConfirmationModal from "./ConfirmationModal";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const ListStudents = () => {
   const [students, setStudents] = useState("");
@@ -102,10 +104,13 @@ const ListStudents = () => {
 
       <div className="overflow-x-auto">
         {loading ? ( 
-          <div className="flex justify-center items-center py-10">
-            <span className="loader"></span>{" "}
-            <p className="ml-2">Loading Students Data ...</p>
-          </div>
+          <div className="py-10">
+          <Skeleton count={5} height={30} className="mb-2" />
+        </div>
+          // <div className="flex justify-center items-center py-10">
+          //   <span className="loader"></span>{" "}
+          //   <p className="ml-2">Loading Students Data ...</p>
+          // </div>
         ) : (
           <table className="min-w-full bg-white border">
             <thead>
