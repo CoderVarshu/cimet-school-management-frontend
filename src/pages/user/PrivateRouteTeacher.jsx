@@ -19,8 +19,8 @@ const PrivateRouteTeacher = ({children}) => {
       setIsAuthenticate(true);
     }
     else {
-      alert("You do not have permission to access")
-      navigate(-1)
+      
+      navigate('*')
     }
 
   }, [token, role]);

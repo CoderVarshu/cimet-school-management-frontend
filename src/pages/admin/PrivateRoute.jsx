@@ -14,7 +14,7 @@ const PrivateRoute = ({ children }) => {
     if (token && role === 'admin') {
       setIsAuthenticate(true);
     } else {
-      navigate("/adminlogin");
+      navigate("/*");
     }
   }, [token, role, navigate]);
 
