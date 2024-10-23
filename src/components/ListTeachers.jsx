@@ -118,7 +118,9 @@ useEffect(()=>{
               <th className="py-3 px-4 border-b-2">Gender</th>
               <th className="py-3 px-4 border-b-2">Number</th>
               <th className="py-3 px-4 border-b-2">Email</th>
+              { role === 'admin' ?
               <th className="py-3 px-4 border-b-2">Salary</th>
+              :''}
               <th className="py-3 px-4 border-b-2">Class</th>
               { role === 'admin' ?
               <th className="py-3 px-4 border-b-2">Actions</th> :''}
@@ -137,7 +139,9 @@ useEffect(()=>{
                   <td className="py-3 px-4 border-b">{data.gender}</td>
                   <td className="py-3 px-4 border-b">{data.phone}</td>
                   <td className="py-3 px-4 border-b">{data.email}</td>
+                  { role === 'admin' ?
                   <td className="py-3 px-4 border-b">{data.salary}</td>
+                  :''}
                   <td className="py-3 px-4 border-b">{data.class?.className} {data.class?.section}</td>
                   { role === 'admin' ?
                   <td className="py-3 px-4 border-b">
