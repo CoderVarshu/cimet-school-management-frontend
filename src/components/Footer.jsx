@@ -12,6 +12,8 @@ const Footer = () => {
         <div className="flex justify-center items-center text-center">
           <p className="p-2 text-white hover:text-pink-700 hover:underline transition duration-300">
             Terms of Use
+
+            
           </p>
 
           <p className="p-2 text-white hover:text-pink-700 hover:underline transition duration-300">

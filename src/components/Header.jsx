@@ -69,7 +69,7 @@ const Header = () => {
         setShowModal(false);
       }
     };
-    
+
     if (showModal) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -80,6 +80,7 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showModal]);
+
 
   return (
     <header className="bg-black text-white p-4 flex justify-between items-center">

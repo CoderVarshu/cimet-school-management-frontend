@@ -5,6 +5,7 @@ import {
   addSubmission,
   getSubmissionByStudentId,
   submissiondata,
+  submissionLoading,
   updateSubmission,
 } from "../../redux/slices/assignmentSubmissionSlice";
 import { toast } from "react-toastify";
@@ -22,6 +23,7 @@ const AssignmentSubmissionForm = ({
   const dispatch = useDispatch();
 
   const selectionSubmission = useSelector(submissiondata);
+  const loading = useSelector(submissionLoading)
 
   useEffect(() => {
     if (data?._id && selectedAssignment?._id) {
@@ -50,56 +52,77 @@ const AssignmentSubmissionForm = ({
 
   const handleSubmit = (e) => {
 
-      e.preventDefault();
-    if(type !== 'Update'){
-    const payload = {
-      task,
-      checked: false,
-      assignmentId: selectedAssignment?._id,
-      studentId: data?._id,
-      classId: selectedAssignment?.classId?._id,
-      subjectId: selectedAssignment?.subjectId?._id,
-      schoolId: selectedAssignment?.schoolId?._id,
-    };
+    e.preventDefault();
+    if (type !== 'Update') {
+      const payload = {
+        task,
+        checked: false,
+        assignmentId: selectedAssignment?._id,
+        studentId: data?._id,
+        classId: selectedAssignment?.classId?._id,
+        subjectId: selectedAssignment?.subjectId?._id,
+        schoolId: selectedAssignment?.schoolId?._id,
+      };
 
-    dispatch(addSubmission(payload))
-      .then((response) => {
-        if (response?.payload?.status) {
-          toast.success(
-            response?.payload?.message || "Assignment Submitted Successfully"
-          );
-          closeSubmissionModal();
-        } else {
-          toast.warning(response?.payload?.message);
-          closeSubmissionModal();
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-    } else {
-        const payload ={
-            _id: selectionSubmission[0]?._id,
-            task
-        }
-        dispatch(updateSubmission(payload)).then((res) => {
-            if (res?.payload?.status) {
-                toast.success(res?.payload?.message)
-                closeSubmissionModal()
-                // dispatch(getSubmissionByAssignmentId(selectedAssignment?._id))
-
-            } else {
-                toast.warning(res.message)
-            }
-        }).catch((error) => {
-            toast.error(error.message)
+      dispatch(addSubmission(payload))
+        .then((response) => {
+          if (response?.payload?.status) {
+            toast.success(
+              response?.payload?.message || "Assignment Submitted Successfully"
+            );
+            closeSubmissionModal();
+          } else {
+            toast.warning(response?.payload?.message);
+            closeSubmissionModal();
+          }
         })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    } else {
+      const payload = {
+        _id: selectionSubmission[0]?._id,
+        task
+      }
+      dispatch(updateSubmission(payload)).then((res) => {
+        if (res?.payload?.status) {
+          toast.success(res?.payload?.message)
+          closeSubmissionModal()
+          // dispatch(getSubmissionByAssignmentId(selectedAssignment?._id))
+
+        } else {
+          toast.warning(res.message)
+        }
+      }).catch((error) => {
+        toast.error(error.message)
+      })
     }
   };
 
+  if (loading) {
+    return <div className="h-[300px] flex justify-center items-center">
+      <div className="flex flex-col w-full mx-auto p-8 bg-white rounded-lg shadow-md animate-pulse">
+        <div className="h-8 bg-gray-300 rounded mb-6"></div>
+        <div className="flex items-center justify-between bg-gray-100 p-2 mb-4 rounded">
+          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          </label>
+          <div className="h-8 bg-gray-300 rounded"></div>
+        </div>
+        <div className="flex justify-end">
+          <div className="h-10 bg-gray-300 rounded w-1/4"></div>
+        </div>
+      </div>
+
+    </div>
+  }
+
   return (
     <div className="flex justify-center m-5 items-center ">
-      <div className="flex flex-col w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-md">
+      <div className="flex flex-col w-full mx-auto p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           {type === "Update" ? "Update Submission" : "Add Submission"}
         </h2>
@@ -136,11 +159,10 @@ const AssignmentSubmissionForm = ({
                   : false
               }
               type="submit"
-              className={`px-4 py-2 rounded text-white ${
-                selectionSubmission?.length && selectionSubmission[0]?.checked
+              className={`px-4 py-2 rounded text-white ${selectionSubmission?.length && selectionSubmission[0]?.checked
                   ? "bg-gray-700 cursor-not-allowed"
                   : "bg-black hover:bg-black-600 cursor-pointer"
-              }`}
+                }`}
             >
               Submit
             </button>

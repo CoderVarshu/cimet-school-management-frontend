@@ -53,7 +53,7 @@ export const updateSubmission = createAsyncThunk("submission/updateSubmission", 
 const submissionSlice = createSlice({
     name:'submission',
     initialState: {
-        submissionDataById:[],
+        submissionDataById:[],     
         submissionByStudent:[],
         loading: false,
         error: null
