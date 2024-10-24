@@ -42,6 +42,9 @@ const UserLogIn = () => {
         if(!role){
           errors.role = "Select Role"
         }
+        if (!values.schoolId) {
+          errors.schoolId = "Select School";
+        }
         return errors;
       }}
       onSubmit={async (values, { resetForm }) => {
@@ -101,7 +104,11 @@ const UserLogIn = () => {
             <select
             name="schoolId"
             value={values.schoolId} onChange={handleChange}
-             className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+             className={`block w-full p-2 border border-gray-300 ${
+              touched.schoolId && errors.schoolId
+                ? "border-red-500"
+                : "border-gray-300"
+            } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}>
               <option value="" >Select School</option>
               {schoolDetails.length > 0 &&
                 schoolDetails?.map((item) => (
@@ -114,6 +121,9 @@ const UserLogIn = () => {
                   </option>
                 ))}
             </select>
+            {touched.schoolId && errors.schoolId ? (
+              <div className="text-red-500 text-sm mt-1">{errors.schoolId}</div>
+            ) : null}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
@@ -122,7 +132,11 @@ const UserLogIn = () => {
             <select
             name="role"
             value={role} onChange={(e)=> setRole(e.target.value)}
-             className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+             className={`block w-full p-2 border border-gray-300 ${
+              !role && errors.role
+                ? "border-red-500"
+                : "border-gray-300"
+            }  rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}>
               <option value="" >Select Role</option>
               <option value={'teacher'}>Teacher</option>
               <option value={'student'}>Student</option>

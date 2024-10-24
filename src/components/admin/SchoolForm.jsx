@@ -5,9 +5,12 @@ import { registerSchool } from "../../redux/slices/schoolSlice";
 import { toast } from "react-toastify";
 import Header from "../Header";
 import Footer from "../Footer";
+import { validateEmail, validateNumber } from "../../utils/constants";
 
 const SchoolForm = () => {
     const dispatch = useDispatch()
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const [getSchoolDetails, setSchoolDetails] = useState({
@@ -26,8 +29,42 @@ const SchoolForm = () => {
     });
   };
 
+  const validate = () => {
+    const errors = {};
+
+    if (!getSchoolDetails.name) {
+      errors.name = "Name is required";
+    }
+
+    const validateEmails = validateEmail(getSchoolDetails.email)
+    if(validateEmails.error){
+      errors.email = validateEmails.message
+    }
+
+    const validatePhone = validateNumber(getSchoolDetails.phone)
+    if(validatePhone.error){
+      errors.phone = validatePhone.message
+    }
+    
+    if (!getSchoolDetails.address) {
+      errors.address = "Address is required";
+    }
+    // if (!getSchoolDetails.moto) {
+    //   errors.moto = "School moto is required";
+    // }
+
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return; // Stop form submission if validation fails
+    }
+    setLoading(true);
     try {
     const response = await dispatch(registerSchool(getSchoolDetails)).unwrap();
      if(response.status){
@@ -40,6 +77,8 @@ const SchoolForm = () => {
     } catch (error) {
         toast.error(error.message || "Something went wrong. Please try again.")
       console.error('Error222:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -53,7 +92,6 @@ const SchoolForm = () => {
           Add School Details
         </h2>
         <form onSubmit={handleSubmit}>
-          {/* Name Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Name
@@ -63,11 +101,11 @@ const SchoolForm = () => {
               name="name"
               value={getSchoolDetails.name}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
+              // required
+              className={`w-full p-2 border ${errors.name ? "border-red-500" : "border-gray-300"} rounded`}
+              />
+              {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
           </div>
-          {/* Email Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
@@ -77,11 +115,10 @@ const SchoolForm = () => {
               name="email"
               value={getSchoolDetails.email}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
+              className={`w-full p-2 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded`}
+              />
+              {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
           </div>
-          {/* Phone Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Phone
@@ -91,11 +128,10 @@ const SchoolForm = () => {
               name="phone"
               value={getSchoolDetails.phone}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
-          {/* Address Field */}
+              className={`w-full p-2 border ${errors.phone ? "border-red-500" : "border-gray-300"} rounded`}
+              />
+              {errors.phone && <div className="text-red-500 text-sm mt-1">{errors.phone}</div>}
+            </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Address
@@ -105,11 +141,10 @@ const SchoolForm = () => {
               name="address"
               value={getSchoolDetails.address}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
-          {/* Moto Field */}
+              className={`w-full p-2 border ${errors.address ? "border-red-500" : "border-gray-300"} rounded`}
+              />
+              {errors.address && <div className="text-red-500 text-sm mt-1">{errors.address}</div>}
+            </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               School Moto
@@ -120,17 +155,20 @@ const SchoolForm = () => {
               value={getSchoolDetails.moto}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded"
-              required
             />
+            {/* className={`w-full p-2 border ${errors.moto ? "border-red-500" : "border-gray-300"} rounded`}
+              />
+              {errors.moto && <div className="text-red-500 text-sm mt-1">{errors.moto}</div>} */}
+
           </div>
-          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"
               className="bg-black text-white px-4 py-2 rounded hover:bg-black-600 w-full"
-            >
-              Add School
-            </button>
+              disabled={loading}
+              >
+                {loading ? "Submitting..." : "Add School"}
+              </button>
           </div>
         </form>
       </div>

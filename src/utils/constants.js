@@ -5,8 +5,7 @@ export function validateEmail(email) {
     let error = false;
     let message = "";
   
-    // Regular expression to validate email with only `@` and `.`
-    const emailRegex = /^[A-Z0-9]+(\.[A-Z0-9]+)*@[A-Z0-9]+(\.[A-Z0-9]+)+$/i;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   
     if (!email) {
       message = "Email address is required";
