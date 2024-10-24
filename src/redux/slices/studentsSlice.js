@@ -30,12 +30,11 @@ export const getStudentsData = createAsyncThunk(
 
   export const getStudentByClass = createAsyncThunk(
     "students/getStudentByData",
-    async (schoolId, classId,{ rejectWithValue }) => {
+    async ({schoolId, classId},{ rejectWithValue }) => {
       try {
         const response = await axios.get(
           `${base_url}/student/class/${schoolId}/${classId}`
         );
-        console.log("STD API", response)
         return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data?.message || "Failed to fetch students data");

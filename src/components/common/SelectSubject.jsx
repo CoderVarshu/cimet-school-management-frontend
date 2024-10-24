@@ -57,7 +57,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
         value={selectedSubject}
         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
-       {multiple ? <option value=''>Select Subject</option> :""}
+       {!multiple ? <option value=''>Select Subject</option> :""}
         {subjects.map((cls) => (
           <option key={cls._id} value={cls._id} disabled={selectedSubject.includes(cls._id)}>
             {cls.subjectName}

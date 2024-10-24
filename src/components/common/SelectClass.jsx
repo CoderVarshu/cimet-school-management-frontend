@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchClasses, getClassesData } from "../../redux/slices/classSlice"
 import { useParams } from "react-router-dom"
+import Select from "react-select"
 
 const SelectClass = ({ multiple, selectedClasses, onChange }) => {
 
@@ -10,9 +11,10 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
   const dispatch = useDispatch()
   const classesData = useSelector(getClassesData)
   const [classes, setClasses] = useState([])
+  let [temp, setTemp] = useState([]);
 
-  console.log("SELECTED",selectedClasses )
-  
+  console.log("CLASS", selectedClasses)
+
   useEffect(() => {
     if (id) {
       dispatch(fetchClasses(id))
@@ -26,39 +28,52 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
   }, [classesData])
 
 
-  const handleChange = (event) => {
+  const options = classes.map((cls) => ({
+    value: cls._id,
+    label: `${cls.className} ${cls.section}`,
+  }));
+
+  const handleChange = (selectedOptions) => {
     if (multiple) {
-      const selectedOptions = Array.from(
-        event.target.selectedOptions,
-        (option) => option.value
-      );
-      onChange(selectedOptions);
+
+      const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
+      onChange(selectedIds);
     } else {
-      console.log("",event.target.value)
-      onChange(event.target.value);
+      const selectedId = selectedOptions ? selectedOptions.value : null;
+      onChange(selectedId);
     }
   };
 
-  return (
-    <>
-      <label className="block text-sm font-medium text-gray-700 mb-2">Select Class</label>
-      <select
-        onChange={handleChange}
-        multiple={multiple}
-        value={multiple ? selectedClasses : selectedClasses}
-        className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-      >
-        <option value="">Select a class</option>
-        {classes.map((cls) => (
-        
-            <option key={cls._id} value={cls._id}>
-              {cls.className}  {cls.section}
-            </option>
-        
-        ))}
-      </select>
-    </>
+  useEffect(() => {
+    let gt = []
+    if (typeof selectedClasses[0] === "object") {
+      selectedClasses.forEach((ele) => (gt.push(ele._id)))
+    } else {
+      gt = selectedClasses
+    }
+    setTemp(gt)
 
+  }, [selectedClasses])
+
+  // console.log(temp,"Temp")
+
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">Select Class</label>
+      <Select
+        isMulti={multiple}
+        options={options}
+        value={multiple
+          ? options?.filter(option => temp?.includes(option?.value))
+          : options?.find(option => option.value === selectedClasses?._id)
+        }
+        onChange={handleChange}
+        className="basic-select"
+        classNamePrefix="select"
+        placeholder={multiple ? "Select classes..." : "Select a class"}
+      />
+    </div>
   )
 }
 

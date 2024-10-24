@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteTeacher,
-  //  getClassTeachersData,
+   getClassTeachersData,
     getTeachersData, teachersData, teachersLoading } from "../redux/slices/teacherSlice"
 import { AiOutlineDelete } from "react-icons/ai"
 import { BiSolidEdit } from "react-icons/bi"
@@ -16,8 +16,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 const ListTeachers = () => {
 
   const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
-  // const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
-  // const classId = userData?.class?._id
+  const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
+  const classId = userData?.class?._id
 
   const {id} = useParams()
  
@@ -31,20 +31,20 @@ const ListTeachers = () => {
   const data = useSelector(teachersData)
   const loading = useSelector(teachersLoading)
 
-  useEffect(()=>{
-    if(id){
-   dispatch(getTeachersData(id))
-    }
-  }, [id])
+  // useEffect(()=>{
+  //   if(id){
+  //  dispatch(getTeachersData(id))
+  //   }
+  // }, [id])
 
-  // useEffect(() => {
-  //   if (role === 'admin' && id) {
-  //     dispatch(getTeachersData(id))
-  //   }
-  //   if ((role === "teacher" || role === "student") && classId) {
-  //     dispatch(getClassTeachersData(id))
-  //   }
-  // }, [classId, id, role])
+  useEffect(() => {
+    if (role === 'admin' && id) {
+      dispatch(getTeachersData(id))
+    }
+    if (role === "student" && classId) {
+      dispatch(getClassTeachersData({schoolId: id, classId}))
+    }
+  }, [classId, id, role])
 
 useEffect(()=>{
   if(data){
@@ -105,11 +105,6 @@ useEffect(()=>{
         <div className="py-10">
         <Skeleton count={5} height={30} className="mb-2" />
       </div>
-
-        // <div className="flex justify-center items-center py-10">
-        //   <span className="loader"></span>{" "}
-        //   <p className="ml-2">Loading Teachers Data ...</p>
-        // </div>
       ) : (
         <table className="min-w-full bg-white border">
           <thead>
@@ -142,7 +137,15 @@ useEffect(()=>{
                   { role === 'admin' ?
                   <td className="py-3 px-4 border-b">{data.salary}</td>
                   :''}
-                  <td className="py-3 px-4 border-b">{data.class?.className} {data.class?.section}</td>
+                  <td className="py-3 px-4 border-b">
+                    {data?.class.length > 0 &&
+                     data?.class.map((classesData, index)=>
+                      <span key={index}>
+                    {classesData?.className}{classesData?.section}
+                    {index < data.class.length - 1 && ', '}
+                    </span>
+                    ) }
+                    </td>
                   { role === 'admin' ?
                   <td className="py-3 px-4 border-b">
                     <button

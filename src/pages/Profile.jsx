@@ -14,7 +14,7 @@ const Profile = () => {
         navigate("/login");
     }
 
-    const handlePassword =()=>{
+    const handlePassword = () => {
         toast.warning("You Do not have Admin Access ")
     }
 
@@ -108,7 +108,7 @@ const Profile = () => {
                                         <input
                                             type="text"
                                             id="class-section"
-                                            value={`${profileData?.class?.className} ${profileData?.class?.section}`}
+                                            value={profileData?.class?.map(classItem => `${classItem.className} ${classItem.section}`).join(', ')}
                                             disabled
                                             className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                                             placeholder="Class and Section"
