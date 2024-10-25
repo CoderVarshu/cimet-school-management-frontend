@@ -32,11 +32,6 @@ const ListStudents = () => {
   const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
   const userData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
   const classId = userData?.class[0]?._id
-
-  useEffect(() => {
-
-    if (id) dispatch(getStudentsData(id));
-  }, [id]);
   
   console.log("Role", role, classId)
 
@@ -44,8 +39,8 @@ const ListStudents = () => {
     if (role === 'admin' && id) {
       dispatch(getStudentsData(id));
     }
-   if (role === "teacher" && classId )  {
-    dispatch(getStudentByClass({schoolId: id, classId}))
+   if (role === "teacher" )  {
+    dispatch(getStudentByClass({schoolId: id,teacherId:userData?._id}))
     }
   }, [classId, id, role])
 

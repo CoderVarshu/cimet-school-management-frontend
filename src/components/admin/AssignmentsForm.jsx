@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,10 +12,10 @@ const AssignmentsForm = () => {
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const getProfileData = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) :null
-// const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
+const role = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : null
  const {id} = useParams()
 
-const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
+const [teacherId, setTeacherId] = useState(role === 'teacher' ? getProfileData?._id : null )
 
   const [getAssignmentsDetails, setAssignmentsDetails] = useState({
     title: "",
@@ -25,6 +25,12 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
     teacherId,
     schoolId: id,
   });
+
+  useEffect(()=>{
+   if(role === 'teacher' && getProfileData ){
+    setTeacherId(getProfileData?._id)
+   }
+  }, [role])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +55,6 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(addAssignment(getAssignmentsDetails)).then((res) => {
-      console.log("RESS", res)
       if (res?.payload?.status) {
         toast.success(res?.payload?.message);
         navigate(-1);

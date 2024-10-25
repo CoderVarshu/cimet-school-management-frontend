@@ -2,6 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { base_url } from "../../utils/constants";
 
+// get assignment for teacher assigned class
+
+export const getAssignmentForTeach = createAsyncThunk("assignment/getAssignmentByTeacher", async (teacherId, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(
+            `${base_url}/assignment/teacher/${teacherId}`
+        );
+        return response.data;
+
+    } catch (error) {
+        return rejectWithValue(error.response?.data || error.message);
+    }
+})
+
 
 // get Assignment By Class
 
@@ -100,7 +114,18 @@ const assignmentSlice = createSlice({
             state.loading = false,
                 state.error = action.error.message
         })
+        builder.addCase(getAssignmentForTeach.pending, (state) => {
+            state.loading = true
+        })
 
+        builder.addCase(getAssignmentForTeach.fulfilled, (state, action) => {
+            state.loading = false,
+                state.assignmentsData = action.payload
+        })
+        builder.addCase(getAssignmentForTeach.rejected, (state, action) => {
+            state.loading = false,
+                state.error = action.error.message
+        })
     }
 })
 

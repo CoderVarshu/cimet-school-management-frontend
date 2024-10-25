@@ -9,12 +9,26 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
   const dispatch = useDispatch();
   const subjectData = useSelector(getSubjectData);
   const [subjects, setSubjects] = useState([]);
+  const [temp, setTemp] = useState([])
+
 
   useEffect(() => {
     if (id) {
       dispatch(fetchSubjects(id));
     }
   }, [id, dispatch]);
+
+  useEffect(()=>{
+    let sub = []
+
+    if(typeof selectedSubject[0] === 'object'){
+     selectedSubject.forEach((ele) => (sub.push(ele._id)))
+    }else {
+     sub = selectedSubject
+    }
+    setTemp(sub)
+
+ }, [selectedSubject])
 
   useEffect(() => {
     if (subjectData) {
@@ -28,9 +42,12 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
   };
 
   const handleRemove = (subjectId) => {
-    const updatedSubjects = selectedSubject.filter((id) => id !== subjectId);
+    const updatedSubjects = temp.filter((id) => id !== subjectId);
     onChange(updatedSubjects);
   };
+
+  console.log("temp", temp)
+  console.log("Selected", selectedSubject)
 
   return (
     <div>
@@ -39,7 +56,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
       </label>
       { multiple ? 
       <div className="flex flex-wrap mb-4">
-        {selectedSubject.length > 0 && selectedSubject?.map((subjectId) => {
+        {temp.length > 0 && temp?.map((subjectId) => {
           const subject = subjects.find((cls) => cls._id === subjectId);
           return (
             subject && (
@@ -59,7 +76,7 @@ const SelectSubject = ({ onChange, multiple, selectedSubject }) => {
       >
        {!multiple ? <option value=''>Select Subject</option> :""}
         {subjects.map((cls) => (
-          <option key={cls._id} value={cls._id} disabled={selectedSubject.includes(cls._id)}>
+          <option key={cls._id} value={cls._id} disabled={temp.includes(cls._id)}>
             {cls.subjectName}
           </option>
         ))}

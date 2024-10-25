@@ -31,7 +31,6 @@ const UpdateClassForm = ({ selectedClassUpdate, setSelectedClassUpdate, closeMod
 
   useEffect(() => {
     if (selectedClassUpdate.subjects.length) {
-      console.log("selectedClassUpdate.subjects",selectedClassUpdate.subjects)
       setSelectedClassUpdate((prev) => ({
         ...prev,
         subjects: selectedClassUpdate.subjects,

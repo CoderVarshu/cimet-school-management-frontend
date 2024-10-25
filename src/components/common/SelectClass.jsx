@@ -13,8 +13,6 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
   const [classes, setClasses] = useState([])
   let [temp, setTemp] = useState([]);
 
-  console.log("CLASS", selectedClasses)
-
   useEffect(() => {
     if (id) {
       dispatch(fetchClasses(id))
@@ -26,7 +24,6 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
       setClasses(classesData)
     }
   }, [classesData])
-
 
   const options = classes.map((cls) => ({
     value: cls._id,
@@ -54,8 +51,6 @@ const SelectClass = ({ multiple, selectedClasses, onChange }) => {
     setTemp(gt)
 
   }, [selectedClasses])
-
-  // console.log(temp,"Temp")
 
 
   return (

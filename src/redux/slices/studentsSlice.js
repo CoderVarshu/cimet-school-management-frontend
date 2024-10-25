@@ -30,10 +30,10 @@ export const getStudentsData = createAsyncThunk(
 
   export const getStudentByClass = createAsyncThunk(
     "students/getStudentByData",
-    async ({schoolId, classId},{ rejectWithValue }) => {
+    async ({schoolId, teacherId},{ rejectWithValue }) => {
       try {
         const response = await axios.get(
-          `${base_url}/student/class/${schoolId}/${classId}`
+          `${base_url}/student/class/teacher/${schoolId}/${teacherId}`
         );
         return response.data;
       } catch (err) {
@@ -111,6 +111,5 @@ export const studentsData = (state) => {
 export const studenstLoading = (state) => {
   return state.student.loading;
 };
-
 
 export default studentsSlice.reducer;

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { assignmentsData, assignmentsLoading, deleteAssignment, getAssignment, getAssignmentBySchool } from "../redux/slices/assignmentSlice";
+import { assignmentsData, assignmentsLoading, deleteAssignment, getAssignment, getAssignmentBySchool, getAssignmentForTeach } from "../redux/slices/assignmentSlice";
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UpdateAssignments from "./user/UpdateAssignments";
@@ -31,15 +31,13 @@ const ListAssignments = () => {
   const data = useSelector(assignmentsData)
   const loading = useSelector(assignmentsLoading)
 
-  // useEffect(()=>{
-  //   if(id){
-  //     dispatch(getAssignmentBySchool(id))
-  //   }
-  // }, [id])
-
   useEffect(() => {
-    if ((role === 'admin' || role === "teacher"  )  && id) {
+    if (role === 'admin' && id) {
       dispatch(getAssignmentBySchool(id))
+    }
+    if(role === 'teacher'){
+      dispatch(getAssignmentForTeach(userData?._id))
+           
     }
     else if ( role === "student" && classId) {
       dispatch(getAssignment(classId));
@@ -53,11 +51,6 @@ const ListAssignments = () => {
     }
   }, [data])
 
-
-  // const openEditModal = (data) => {
-  //   setSelectedAssignmentUpdate(data);
-  //   setIsModalOpen(true);
-  // };
 
   const closeSubmissionModal = () => {
     setSubmissionModal(false)
@@ -126,7 +119,6 @@ const ListAssignments = () => {
                 <th className="py-3 px-4 border-b-2">Description</th>
                 <th className="py-3 px-4 border-b-2">Subject</th>
                 <th className="py-3 px-4 border-b-2">Class</th>
-                {/* <th className="py-3 px-4 border-b-2">Date</th> */}
                 { (role === 'teacher' || role === 'admin') ?
                 <th className="py-3 px-4 border-b-2">Actions</th>
                 :''}
