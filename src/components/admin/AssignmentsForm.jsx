@@ -40,7 +40,6 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
       ...getAssignmentsDetails, classId: selectedClass
     })
   }
-
   const handleSubjectChange = (selectedSubject) => {
     setAssignmentsDetails({
       ...getAssignmentsDetails, subjectId: selectedSubject[0]
@@ -48,9 +47,7 @@ const [teacherId, setTeacherId] = useState(getProfileData?._id || null)
   }
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     dispatch(addAssignment(getAssignmentsDetails)).then((res) => {
       console.log("RESS", res)
       if (res?.payload?.status) {
